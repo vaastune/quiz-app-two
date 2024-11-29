@@ -1,5 +1,26 @@
 @extends('layouts.app')
 
+@section('title', 'Create Quiz')
+
+@section('content')
+<div class="container">
+    <h1>Create a New Quiz</h1>
+    <form method="POST" action="{{ route('quizzes.store') }}">
+        @csrf
+        <div class="mb-3">
+            <label for="title" class="form-label">Quiz Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Quiz</button>
+    </form>
+</div>
+@endsection
+
+
+
+
+{{-- @extends('layouts.app')
+
 @section('content')
 <div class="container">
     <h1>Create a New Quiz</h1>
@@ -42,7 +63,7 @@
         document.getElementById('questions').insertAdjacentHTML('beforeend', newQuestion);
     });
 </script>
-@endsection
+@endsection --}}
 
 
 
