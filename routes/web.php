@@ -14,7 +14,7 @@ Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name(
 Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
 
-
+Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
