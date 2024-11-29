@@ -10,8 +10,9 @@ Route::get('/quizzes', [QuizController::class, 'index']); // Show all quizzes
 Route::get('/quizzes/{quiz}', [QuizController::class, 'show']); // Show a single quiz
 Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit']); // Submit answers
 Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name('quizzes.results');
-
 Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+
+//Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
 
 Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
