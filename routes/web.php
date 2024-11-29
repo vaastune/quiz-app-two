@@ -11,6 +11,7 @@ Route::get('/quizzes/{quiz}', [QuizController::class, 'show']); // Show a single
 Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit']); // Submit answers
 Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name('quizzes.results');
 Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+Route::get('/quizzes/create', [App\Http\Controllers\QuizController::class, 'create'])->name('quizzes.create');
 
 //Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
