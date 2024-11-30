@@ -50,6 +50,7 @@ Route::post('/quizzes/{id}/submit', [QuizController::class, 'submit'])->name('qu
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
 
 Route::get('/', [HomeController::class, 'index'])->name('welcome');
 
