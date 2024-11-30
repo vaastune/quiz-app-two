@@ -15,6 +15,8 @@ Route::get('/quizzes/create', [App\Http\Controllers\QuizController::class, 'crea
 
 //Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
 
 Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
 /*
