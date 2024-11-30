@@ -21,11 +21,34 @@ class QuizController extends Controller
 
     public function store(Request $request)
     {
-        $quiz = Quiz::create($request->all());
-        return redirect()->route('quizzes.index');
+        // Validate the data if needed
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'questions.*.text' => 'required|string|max:255',
+            'questions.*.choices.*' => 'required|string|max:255',
+        ]);
 
-        return redirect()->route('quizzes.index'); // Redirect after saving
+        $quiz = Quiz::create(['title' => $request->title]);
+
+        foreach ($request->input('questions') as $questionData) {
+            $question = new Question();
+            $question->text = $questionData['text'];
+            $question->quiz_id = $quiz->id;
+
+            // Save the question first
+            $question->save();
+
+            foreach ($questionData['choices'] as $choiceText) {
+                $choice = new Choice(); // Assuming you have a Choice model
+                $choice->text = $choiceText;
+                $choice->question_id = $question->id;
+                $choice->save();
+            }
+        }
+
+        return redirect()->route('quizzes.index');
     }
+
 
     public function show($id)
     {
