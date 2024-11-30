@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 // web.php (routes file)
 use App\Http\Controllers\QuizController;
 
+
+Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
 Route::get('/quizzes', [QuizController::class, 'index']); // Show all quizzes
 Route::get('/quizzes/{quiz}', [QuizController::class, 'show']); // Show a single quiz
 Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit']); // Submit answers
@@ -15,7 +18,7 @@ Route::get('/quizzes/create', [App\Http\Controllers\QuizController::class, 'crea
 
 //Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
-Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
 
 
 Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
