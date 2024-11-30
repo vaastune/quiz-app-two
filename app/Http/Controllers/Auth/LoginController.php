@@ -27,10 +27,7 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
-    protected function loggedOut(Request $request)
-{
-    return redirect('/'); // Redirect to home page or any route of your choice.
-}
+
 
     /**
      * Create a new controller instance.
@@ -42,4 +39,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+
+    protected function loggedOut(Request $request)
+{
+    return redirect('/'); // Redirect to the home page or any other route.
+}
+
 }
