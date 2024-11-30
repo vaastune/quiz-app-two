@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Route;
 // web.php (routes file)
-use App\Http\Controllers\QuizController;
+use App\Http\Controllers\Auth\LoginController;
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 
 
 
@@ -14,7 +17,7 @@ Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit']); // Sub
 Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name('quizzes.results');
 Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::get('/quizzes/create', [App\Http\Controllers\QuizController::class, 'create'])->name('quizzes.create');
-Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+//Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 //Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');

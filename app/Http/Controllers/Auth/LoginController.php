@@ -41,8 +41,9 @@ class LoginController extends Controller
     }
 
     protected function loggedOut(Request $request)
-{
-    return redirect('/'); // Redirect to the home page or any other route.
-}
+    {
+        return redirect('/'); // Redirect to your desired page.
+    }
+
 
 }
