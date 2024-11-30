@@ -1,22 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Quiz: ' . $quiz->title)
-
 @section('content')
-    <h2>{{ $quiz->title }}</h2>
+    <h1>{{ $quiz->title }}</h1>
+
     <form action="{{ route('quizzes.submit', $quiz->id) }}" method="POST">
         @csrf
-        @foreach ($quiz->questions as $question)
-            <div>
-                <p>{{ $question->question }}</p>
-                @foreach (json_decode($question->options) as $option)
+
+        @foreach($quiz->questions as $index => $question)
+            <div class="question">
+                <p>{{ $index + 1 }}. {{ $question->text }}</p>
+
+                @foreach($question->choices as $choice)
                     <label>
-                        <input type="radio" name="answer[{{ $question->id }}]" value="{{ $option }}">
-                        {{ $option }}
+                        <input type="radio" name="answers[{{ $question->id }}]" value="{{ $choice->id }}">
+                        {{ $choice->text }}
                     </label><br>
                 @endforeach
             </div>
         @endforeach
-        <button type="submit">Submit</button>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 @endsection

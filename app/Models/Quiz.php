@@ -10,7 +10,8 @@ class Quiz extends Model
         'title', // Add other attributes as needed, e.g., 'user_id' if you have that
     ];
     public function questions()
-    {
-        return $this->hasMany(Question::class);
-    }
+{
+    return $this->hasMany(Question::class);
+}
+
 }

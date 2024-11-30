@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    // Optional: add any specific attributes or methods needed
+    public function choices()
+{
+    return $this->hasMany(Choice::class);
+}
+
 }
