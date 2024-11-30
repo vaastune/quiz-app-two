@@ -4,29 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Quiz;
 use App\Models\Question;
+use App\Models\Result; // Add this line to import the Result model
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
     // Display a list of all quizzes
     public function index()
-{
-    $quizzes = Quiz::all();
-    // Ensure that the $result is set if needed. For example:
-    $result = Result::where('user_id', auth()->id())->latest()->first();
+    {
+        $quizzes = Quiz::all();
+        // Ensure that the $result is set if needed. For example:
+        $result = Result::where('user_id', auth()->id())->latest()->first();
 
-    return view('quizzes.index', [
-        'quizzes' => $quizzes,
-        'result' => $result, // Pass the $result variable to the view
-    ]);
-}
-
+        return view('quizzes.index', [
+            'quizzes' => $quizzes,
+            'result' => $result, // Pass the $result variable to the view
+        ]);
+    }
 
     // Show a form to create a new quiz
     public function create()
     {
         return view('quizzes.create');
     }
+}
+
 
     // Store a newly created quiz in the database
     public function store(Request $request)
