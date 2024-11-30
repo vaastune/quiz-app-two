@@ -9,6 +9,9 @@ use App\Http\Controllers\Auth\LoginController;
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
+use App\Http\Controllers\QuizController;
+
+Route::resource('quizzes', QuizController::class);
 
 
 Route::get('/quizzes', [QuizController::class, 'index']); // Show all quizzes
