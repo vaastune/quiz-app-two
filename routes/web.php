@@ -17,7 +17,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 use App\Http\Controllers\QuizController;
 
 Route::resource('quizzes', QuizController::class);
+Route::post('/quizzes/create', [QuizController::class, 'store'])->name('quizzes.store');
 
+Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 
 Route::get('/quizzes', [QuizController::class, 'index']); // Show all quizzes
 Route::get('/quizzes/{quiz}', [QuizController::class, 'show']); // Show a single quiz

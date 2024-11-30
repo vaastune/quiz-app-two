@@ -23,6 +23,8 @@ class QuizController extends Controller
     {
         $quiz = Quiz::create($request->all());
         return redirect()->route('quizzes.index');
+
+        return redirect()->route('quizzes.index'); // Redirect after saving
     }
 
     public function show($id)
