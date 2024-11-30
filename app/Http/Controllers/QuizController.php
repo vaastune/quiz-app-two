@@ -4,31 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Quiz;
 use App\Models\Question;
-use App\Models\Result; // Add this line to import the Result model
+use App\Models\Result;
+use App\Models\Choice; // Added import for Choice model
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
     // Display a list of all quizzes
     public function index()
-{
-    $quizzes = Quiz::all(); // Retrieve all quizzes
-    $result = Result::where('user_id', auth()->id())->latest()->first(); // Retrieve the most recent result for the logged-in user
+    {
+        $quizzes = Quiz::all(); // Retrieve all quizzes
+        $result = Result::where('user_id', auth()->id())->latest()->first(); // Retrieve the most recent result for the logged-in user
 
-    return view('quizzes.index', [
-        'quizzes' => $quizzes,
-        'result' => $result,
-    ]);
-}
-
+        return view('quizzes.index', [
+            'quizzes' => $quizzes,
+            'result' => $result,
+        ]);
+    }
 
     // Show a form to create a new quiz
     public function create()
     {
         return view('quizzes.create');
     }
-}
-
 
     // Store a newly created quiz in the database
     public function store(Request $request)
@@ -48,7 +46,7 @@ class QuizController extends Controller
             $question->save();
 
             foreach ($questionData['choices'] as $choiceText) {
-                $choice = new \App\Models\Choice(); // Assuming you have a Choice model
+                $choice = new Choice(); // Use the Choice model directly
                 $choice->text = $choiceText;
                 $choice->question_id = $question->id;
                 $choice->save();
@@ -57,35 +55,6 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.index');
     }
-    public function submit(Request $request, $quizId)
-{
-    // Retrieve the quiz and its questions
-    $quiz = Quiz::with('questions.choices')->findOrFail($quizId);
-
-    $userAnswers = $request->input('answers');
-    $score = 0;
-    $totalQuestions = $quiz->questions->count();
-
-    // Iterate through questions and check answers
-    foreach ($quiz->questions as $question) {
-        $correctChoice = $question->choices->where('is_correct', true)->first();
-        if (isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $correctChoice->id) {
-            $score++;
-        }
-    }
-
-    // Save the result to the database
-    Result::create([
-        'quiz_id' => $quizId,
-        'user_id' => auth()->id(),
-        'score' => $score,
-        'total' => $totalQuestions,
-    ]);
-
-    // Redirect or show a result page
-    return redirect()->route('results.index');
-}
-
 
     // Show the details of a specific quiz
     public function show($id)
@@ -118,7 +87,7 @@ class QuizController extends Controller
             $question->save();
 
             foreach ($questionData['choices'] as $choiceText) {
-                $choice = new \App\Models\Choice(); // Assuming you have a Choice model
+                $choice = new Choice(); // Use the Choice model directly
                 $choice->text = $choiceText;
                 $choice->question_id = $question->id;
                 $choice->save();
@@ -126,5 +95,30 @@ class QuizController extends Controller
         }
 
         return redirect()->route('quizzes.show', ['id' => $quiz->id]);
+    }
+
+    // Handle quiz submission and store results
+    public function submit(Request $request, $quizId)
+    {
+        $quiz = Quiz::with('questions.choices')->findOrFail($quizId);
+        $userAnswers = $request->input('answers');
+        $score = 0;
+        $totalQuestions = $quiz->questions->count();
+
+        foreach ($quiz->questions as $question) {
+            $correctChoice = $question->choices->where('is_correct', true)->first();
+            if (isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $correctChoice->id) {
+                $score++;
+            }
+        }
+
+        Result::create([
+            'quiz_id' => $quizId,
+            'user_id' => auth()->id(),
+            'score' => $score,
+            'total' => $totalQuestions,
+        ]);
+
+        return redirect()->route('results.index');
     }
 }
