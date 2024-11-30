@@ -1,18 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
     <h1>{{ $quiz->title }}</h1>
-
-    @foreach($quiz->questions as $index => $question)
-        <div class="question">
-            <h3>Question {{ $index + 1 }}: {{ $question->text }}</h3>
-            <ul>
-                @foreach($question->choices as $choice)
-                    <li>{{ $choice->text }}</li>
+    <form action="{{ route('quizzes.submit', $quiz->id) }}" method="POST">
+        @csrf
+        @foreach ($quiz->questions as $question)
+            <div>
+                <p>{{ $question->text }}</p>
+                @foreach ($question->choices as $choice)
+                    <label>
+                        <input type="radio" name="answers[{{ $question->id }}]" value="{{ $choice->id }}">
+                        {{ $choice->text }}
+                    </label>
                 @endforeach
-            </ul>
-        </div>
-    @endforeach
-
-    <a href="{{ route('quizzes.index') }}" class="btn btn-primary">Back to Quizzes</a>
+            </div>
+        @endforeach
+        <button type="submit" class="btn btn-primary mt-3">Submit Quiz</button>
+    </form>
+</div>
 @endsection

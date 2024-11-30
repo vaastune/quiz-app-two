@@ -38,8 +38,12 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 
 
 Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
+Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
 
 Route::post('/quizzes/{id}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+Route::post('/quizzes/{quiz}/submit', [QuizSubmissionController::class, 'submit'])->name('quizzes.submit');
+Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
 
 /*
 |--------------------------------------------------------------------------

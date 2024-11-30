@@ -11,8 +11,14 @@ class QuizController extends Controller
     // Display a list of all quizzes
     public function index()
 {
-    $quizzes = Quiz::all(); // Fetch all quizzes
-    return view('quizzes.index', compact('quizzes')); // Pass to the view
+    $quizzes = Quiz::all();
+    // Ensure that the $result is set if needed. For example:
+    $result = Result::where('user_id', auth()->id())->latest()->first();
+
+    return view('quizzes.index', [
+        'quizzes' => $quizzes,
+        'result' => $result, // Pass the $result variable to the view
+    ]);
 }
 
 
@@ -49,6 +55,35 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.index');
     }
+    public function submit(Request $request, $quizId)
+{
+    // Retrieve the quiz and its questions
+    $quiz = Quiz::with('questions.choices')->findOrFail($quizId);
+
+    $userAnswers = $request->input('answers');
+    $score = 0;
+    $totalQuestions = $quiz->questions->count();
+
+    // Iterate through questions and check answers
+    foreach ($quiz->questions as $question) {
+        $correctChoice = $question->choices->where('is_correct', true)->first();
+        if (isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $correctChoice->id) {
+            $score++;
+        }
+    }
+
+    // Save the result to the database
+    Result::create([
+        'quiz_id' => $quizId,
+        'user_id' => auth()->id(),
+        'score' => $score,
+        'total' => $totalQuestions,
+    ]);
+
+    // Redirect or show a result page
+    return redirect()->route('results.index');
+}
+
 
     // Show the details of a specific quiz
     public function show($id)

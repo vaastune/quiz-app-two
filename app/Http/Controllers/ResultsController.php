@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 class ResultsController extends Controller
 {
     public function index()
-    {
-        // Logic for displaying results
-        return view('results.index'); // Ensure you have a Blade file at resources/views/results/index.blade.php
-    }
+{
+    $results = Result::where('user_id', auth()->id())->get();
+    return view('results.index', compact('results'));
+}
+
 }
