@@ -10,10 +10,11 @@ class QuizController extends Controller
 {
     // Display a list of all quizzes
     public function index()
-    {
-        $quizzes = Quiz::all();
-        return view('quizzes.index', compact('quizzes'));
-    }
+{
+    $quizzes = Quiz::all(); // Fetch all quizzes
+    return view('quizzes.index', compact('quizzes')); // Pass to the view
+}
+
 
     // Show a form to create a new quiz
     public function create()
