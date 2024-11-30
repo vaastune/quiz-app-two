@@ -50,6 +50,9 @@ Route::post('/quizzes/{id}/submit', [QuizController::class, 'submit'])->name('qu
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
+
 Route::get('/logout', function () {
     auth()->logout();
     return redirect('/login');
@@ -58,8 +61,9 @@ Route::get('/logout', function () {
 
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('welcome'); // Make sure this matches the name of your Blade template
+})->name('welcome');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
