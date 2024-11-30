@@ -2,44 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Quiz;
-use App\Models\Result;
 use Illuminate\Http\Request;
+use App\Models\Quiz;
+use App\Models\Question;
+use App\Models\Choice;
+use App\Models\Result;
 
 class QuizSubmissionController extends Controller
 {
-    public function submit(Request $request, $quizId)
+    public function store(Request $request, $quizId)
     {
-        // Validate the submission
-        $validated = $request->validate([
-            'answers' => 'required|array',
-            'answers.*' => 'required|integer',
-        ]);
-
-        // Fetch the quiz and its questions
-        $quiz = Quiz::with('questions.choices')->findOrFail($quizId);
-
-        // Calculate the score
-        $calculatedScore = 0;
-        $totalQuestions = $quiz->questions->count();
+        $quiz = Quiz::findOrFail($quizId);
+        $totalQuestions = $quiz->questions()->count();
+        $correctAnswers = 0;
 
         foreach ($quiz->questions as $question) {
-            $selectedChoiceId = $validated['answers'][$question->id] ?? null;
-            $correctChoice = $question->choices->where('is_correct', true)->first();
+            $selectedChoiceId = $request->input('answers.' . $question->id);
+            $choice = $question->choices()->find($selectedChoiceId);
 
-            if ($correctChoice && $selectedChoiceId == $correctChoice->id) {
-                $calculatedScore++;
+            if ($choice && $choice->is_correct) {
+                $correctAnswers++;
             }
         }
 
-        // Save the result
-        $result = Result::create([
-            'quiz_id' => $quizId,
+        $calculatedScore = $correctAnswers;
+
+        // Save the result to the database
+        Result::create([
+            'quiz_id' => $quiz->id,
             'user_id' => auth()->id(),
             'score' => $calculatedScore,
             'total' => $totalQuestions,
         ]);
 
-        return redirect()->route('results.index')->with('success', 'Quiz submitted successfully!');
+        return redirect()->route('quizzes.index')->with('success', 'Quiz submitted successfully!');
     }
 }

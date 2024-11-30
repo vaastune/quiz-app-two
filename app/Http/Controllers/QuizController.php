@@ -11,16 +11,16 @@ class QuizController extends Controller
 {
     // Display a list of all quizzes
     public function index()
-    {
-        $quizzes = Quiz::all();
-        // Ensure that the $result is set if needed. For example:
-        $result = Result::where('user_id', auth()->id())->latest()->first();
+{
+    $quizzes = Quiz::all(); // Retrieve all quizzes
+    $result = Result::where('user_id', auth()->id())->latest()->first(); // Retrieve the most recent result for the logged-in user
 
-        return view('quizzes.index', [
-            'quizzes' => $quizzes,
-            'result' => $result, // Pass the $result variable to the view
-        ]);
-    }
+    return view('quizzes.index', [
+        'quizzes' => $quizzes,
+        'result' => $result,
+    ]);
+}
+
 
     // Show a form to create a new quiz
     public function create()
