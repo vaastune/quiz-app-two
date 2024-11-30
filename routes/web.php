@@ -2,9 +2,14 @@
 
 use Illuminate\Support\Facades\Auth;
 
-use Illuminate\Support\Facades\Route;
+//use Illuminate\Support\Facades\Route;
 // web.php (routes file)
 use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+// Logout Route
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -25,6 +30,7 @@ Route::get('/quizzes/create', [App\Http\Controllers\QuizController::class, 'crea
 //Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
 Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
 
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 
 Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
@@ -38,6 +44,10 @@ Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/logout', function () {
+    auth()->logout();
+    return redirect('/login');
+})->name('logout');
 
 
 
