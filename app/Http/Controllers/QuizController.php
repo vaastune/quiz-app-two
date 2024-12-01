@@ -13,7 +13,7 @@ class QuizController extends Controller
         $quizzes = Quiz::all(); // Get all quizzes
         $result = auth()->user() ? auth()->user()->quizResults()->latest()->first() : null; // Get the latest quiz result for the authenticated user
 
-        return view('quiz.index', compact('quizzes', 'result'));
+        return view('quizzes.index', compact('quizzes', 'result'));
     }
 
     // Method to show a form to create a new quiz

@@ -15,4 +15,9 @@ class Question extends Model
     {
         return $this->hasMany(Option::class);
     }
+    public function choices()
+{
+    return $this->hasMany(Choice::class);
+}
+
 }
