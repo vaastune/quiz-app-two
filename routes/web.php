@@ -19,6 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name('quizzes.results');
     Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+    Route::get('/quizzes/{id}/take', [QuizController::class, 'takeQuiz'])->name('quizzes.take');
+    Route::post('/quizzes/{id}/submit', [QuizController::class, 'submitQuiz'])->name('quizzes.submit');
+
 });
 
 // Basic Auth Routes

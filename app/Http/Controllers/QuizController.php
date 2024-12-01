@@ -36,6 +36,19 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
     }
+    public function takeQuiz($id)
+{
+    // Retrieve the quiz, including related questions and choices
+    $quiz = Quiz::with('questions.choices')->findOrFail($id);
+
+    // Optionally, check if the user has already taken the quiz and display a message or redirect
+    if (auth()->check() && auth()->user()->quizzes()->where('quiz_id', $id)->exists()) {
+        return redirect()->route('quizzes.index')->with('info', 'You have already taken this quiz.');
+    }
+
+    return view('quizzes.take', compact('quiz'));
+}
+
 
     public function storeAdditionalQuestions(Request $request, $id)
     {
@@ -66,6 +79,19 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
     }
+
+    public function submitQuiz(Request $request, $id)
+{
+    $quiz = Quiz::findOrFail($id);
+
+    // Optionally, validate and process answers here
+
+    // Mark the quiz as completed for the user
+    auth()->user()->quizzes()->attach($quiz->id, ['completed_at' => now()]);
+
+    return redirect()->route('quizzes.index')->with('success', 'Quiz completed successfully!');
+}
+
 
 
     public function addQuestions($id)
