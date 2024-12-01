@@ -14,7 +14,7 @@ class QuizController extends Controller
     public function index()
     {
         $quizzes = Quiz::all(); // Retrieve all quizzes
-        $result = Result::where('user_id', auth()->id())->latest()->first(); // Retrieve the most recent result for the logged-in user
+        return view('quiz.index', compact('quizzes'));
 
         return view('quizzes.index', [
             'quizzes' => $quizzes,
@@ -31,13 +31,17 @@ class QuizController extends Controller
     // Store a newly created quiz in the database
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+
+        $request->validate([
             'title' => 'required|string|max:255',
-            'questions.*.text' => 'required|string|max:255',
-            'questions.*.choices.*' => 'required|string|max:255',
+        // $validatedData = $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'questions.*.text' => 'required|string|max:255',
+        //     'questions.*.choices.*' => 'required|string|max:255',
         ]);
 
-        $quiz = Quiz::create(['title' => $request->title]);
+        $quiz = Quiz::create([
+            'title' => $request->title,
 
         foreach ($request->input('questions') as $questionData) {
             $question = new Question();
@@ -53,14 +57,14 @@ class QuizController extends Controller
             }
         }
 
-        return redirect()->route('quizzes.index');
+        return redirect()->route('quiz.index')->with('success', 'Quiz created successfully!');
     }
 
     // Show the details of a specific quiz
     public function show($id)
     {
-        $quiz = Quiz::with('questions.choices')->findOrFail($id);
-        return view('quizzes.show', compact('quiz'));
+        $quiz = Quiz::findOrFail($id);
+        return view('quiz.show', compact('quiz'));
     }
 
     // Display the form to add more questions to a quiz
