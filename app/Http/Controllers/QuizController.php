@@ -40,6 +40,7 @@ class QuizController extends Controller
 {
     $quiz = Quiz::findOrFail($id);
     return view('quizzes.add-questions', compact('quiz'));
+
 }
 
 }
