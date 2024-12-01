@@ -36,11 +36,36 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
     }
+
+    public function storeAdditionalQuestions(Request $request, $id)
+    {
+        $quiz = Quiz::findOrFail($id);
+
+        // Validate the input data
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'choices' => 'required|array|min:2',
+            'choices.*' => 'required|string|max:255',
+        ]);
+
+        // Create a new question and associate it with the quiz
+        $question = $quiz->questions()->create([
+            'text' => $request->input('question'),
+        ]);
+
+        // Save choices for the question
+        foreach ($request->input('choices') as $choiceText) {
+            $question->choices()->create([
+                'text' => $choiceText,
+            ]);
+        }
+
+        return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
+    }
+
     public function addQuestions($id)
-{
-    $quiz = Quiz::findOrFail($id);
-    return view('quizzes.add-questions', compact('quiz'));
-
-}
-
+    {
+        $quiz = Quiz::findOrFail($id);
+        return view('quizzes.add-questions', compact('quiz'));
+    }
 }
