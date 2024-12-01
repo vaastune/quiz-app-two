@@ -14,7 +14,10 @@ class AddQuizIdToQuestionsTable extends Migration
     public function up()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->foreignId('quiz_id')->constrained('quizzes')->onDelete('cascade');
+            // Check if the column does not already exist
+            if (!Schema::hasColumn('questions', 'quiz_id')) {
+                $table->foreignId('quiz_id')->constrained('quizzes')->onDelete('cascade');
+            }
         });
     }
 

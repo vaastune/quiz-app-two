@@ -99,4 +99,13 @@ class QuizController extends Controller
         $quiz = Quiz::findOrFail($id);
         return view('quizzes.add-questions', compact('quiz'));
     }
+
+    public function completeQuiz($id)
+{
+    $quiz = Quiz::findOrFail($id);
+    // Additional logic to mark the quiz as complete, e.g., updating the `completed` column or handling status
+
+    return redirect()->route('quizzes.index')->with('success', 'Quiz completed successfully!');
+}
+
 }
