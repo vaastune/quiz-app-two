@@ -11,17 +11,54 @@
 
         <h2>Questions</h2>
         <div id="question-container">
-            <div class="form-group">
-                <label for="question1">Question 1</label>
-                <input type="text" name="questions[0][text]" id="question1" class="form-control" required>
+            <div class="question-block">
+                <div class="form-group">
+                    <label for="question1">Question 1</label>
+                    <input type="text" name="questions[0][text]" id="question1" class="form-control" required>
+                </div>
                 <label>Choices</label>
-                <input type="text" name="questions[0][choices][]" class="form-control mb-2" placeholder="Choice 1" required>
-                <input type="text" name="questions[0][choices][]" class="form-control mb-2" placeholder="Choice 2" required>
-                <input type="text" name="questions[0][choices][]" class="form-control mb-2" placeholder="Choice 3" required>
-                <input type="text" name="questions[0][choices][]" class="form-control mb-2" placeholder="Choice 4" required>
+                <div class="form-group">
+                    @for ($i = 0; $i < 4; $i++)
+                        <div class="form-check">
+                            <input type="radio" name="questions[0][correct]" value="{{ $i }}" class="form-check-input" required>
+                            <input type="text" name="questions[0][choices][]" class="form-control d-inline-block" placeholder="Choice {{ $i + 1 }}" required>
+                        </div>
+                    @endfor
+                </div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success">Create Quiz</button>
+        <button type="button" id="add-question" class="btn btn-primary mt-3">Add Question</button>
+        <button type="submit" class="btn btn-success mt-3">Create Quiz</button>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const questionContainer = document.getElementById('question-container');
+            const addQuestionButton = document.getElementById('add-question');
+            let questionCount = 1;
+
+            addQuestionButton.addEventListener('click', () => {
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+                questionBlock.innerHTML = `
+                    <div class="form-group">
+                        <label for="question${questionCount}">Question ${questionCount + 1}</label>
+                        <input type="text" name="questions[${questionCount}][text]" id="question${questionCount}" class="form-control" required>
+                    </div>
+                    <label>Choices</label>
+                    <div class="form-group">
+                        ${[0, 1, 2, 3].map(i => `
+                            <div class="form-check">
+                                <input type="radio" name="questions[${questionCount}][correct]" value="${i}" class="form-check-input" required>
+                                <input type="text" name="questions[${questionCount}][choices][]" class="form-control d-inline-block" placeholder="Choice ${i + 1}" required>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                questionContainer.appendChild(questionBlock);
+                questionCount++;
+            });
+        });
+    </script>
 @endsection
