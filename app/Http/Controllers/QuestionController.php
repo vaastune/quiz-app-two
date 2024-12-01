@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question; // Import Question model
-use Illuminate\Http\Request; // Import Request class
+use App\Models\Question;
+use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {

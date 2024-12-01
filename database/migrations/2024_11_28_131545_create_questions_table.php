@@ -10,13 +10,19 @@ return new class extends Migration {
      */
     public function up()
     {
-        if (!Schema::hasTable('quizzes')) {
-            Schema::create('quizzes', function (Blueprint $table) {
-                $table->id();
-                $table->string('title');
-                $table->timestamps();
-            });
-        }
+        Schema::create('questions', function (Blueprint $table) {
+            $table->id();                  // Primary key
+            $table->string('text');        // Question text column
+            $table->timestamps();          // Created and updated timestamps
+        });
+
+        // if (!Schema::hasTable('quizzes')) {
+        //     Schema::create('quizzes', function (Blueprint $table) {
+        //         $table->id();
+        //         $table->string('title');
+        //         $table->timestamps();
+        //     });
+        // }
     }
 
 
