@@ -36,4 +36,10 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
     }
+    public function addQuestions($id)
+{
+    $quiz = Quiz::findOrFail($id);
+    return view('quizzes.add-questions', compact('quiz'));
+}
+
 }
