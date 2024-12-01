@@ -46,6 +46,7 @@ class QuizController extends Controller
             'question' => 'required|string|max:255',
             'choices' => 'required|array|min:2',
             'choices.*' => 'required|string|max:255',
+            'correct_choice' => 'required|in:0,' . implode(',', array_keys($request->input('choices'))),
         ]);
 
         // Create a new question and associate it with the quiz
@@ -54,14 +55,18 @@ class QuizController extends Controller
         ]);
 
         // Save choices for the question
-        foreach ($request->input('choices') as $choiceText) {
+        foreach ($request->input('choices') as $index => $choiceText) {
+            $isCorrect = ($index == $request->input('correct_choice'));
+
             $question->choices()->create([
                 'text' => $choiceText,
+                'is_correct' => $isCorrect,
             ]);
         }
 
         return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
     }
+
 
     public function addQuestions($id)
     {

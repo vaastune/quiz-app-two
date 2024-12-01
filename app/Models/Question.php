@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Question extends Model
 {
@@ -11,24 +11,13 @@ class Question extends Model
 
     protected $fillable = ['text'];
 
-    public function options()
+    public function quiz()
     {
-        return $this->hasMany(Option::class);
+        return $this->belongsTo(Quiz::class);
     }
-    // Question.php
-public function quiz()
-{
-    return $this->belongsTo(Quiz::class);
-}
-
-public function choices()
-{
-    return $this->hasMany(Choice::class);
-}
 
     public function choices()
-{
-    return $this->hasMany(Choice::class);
-}
-
+    {
+        return $this->hasMany(Choice::class);
+    }
 }
