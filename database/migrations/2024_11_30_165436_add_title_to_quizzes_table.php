@@ -8,10 +8,13 @@ return new class extends Migration
 {
     public function up()
 {
-    Schema::table('quizzes', function (Blueprint $table) {
-        $table->string('title')->after('id');
-    });
+    if (!Schema::hasColumn('quizzes', 'title')) {
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->string('title')->after('id')->notNull();
+        });
+    }
 }
+
 
 public function down()
 {

@@ -8,6 +8,13 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\QuizSubmissionController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\QuestionController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
+    Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+});
+
 
 // Basic Auth Routes
 Auth::routes();

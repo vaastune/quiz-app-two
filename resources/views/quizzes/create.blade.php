@@ -1,64 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Create New Quiz</h1>
-    <form action="{{ route('quizzes.store') }}" method="POST">
+<div class="container">
+    <h2>Create a New Question</h2>
+    <form method="POST" action="{{ route('questions.store') }}">
         @csrf
-        <div class="form-group">
-            <label for="title">Quiz Title</label>
-            <input type="text" name="title" id="title" class="form-control" required>
+        <div class="mb-3">
+            <label for="question" class="form-label">Question Text</label>
+            <input type="text" name="text" id="question" class="form-control" required>
         </div>
 
-        <h2>Questions</h2>
-        <div id="question-container">
-            <div class="question-block">
-                <div class="form-group">
-                    <label for="question1">Question 1</label>
-                    <input type="text" name="questions[0][text]" id="question1" class="form-control" required>
-                </div>
-                <label>Choices</label>
-                <div class="form-group">
-                    @for ($i = 0; $i < 4; $i++)
-                        <div class="form-check">
-                            <input type="radio" name="questions[0][correct]" value="{{ $i }}" class="form-check-input" required>
-                            <input type="text" name="questions[0][choices][]" class="form-control d-inline-block" placeholder="Choice {{ $i + 1 }}" required>
-                        </div>
-                    @endfor
-                </div>
+        <div id="options-container">
+            <h4>Options</h4>
+            <div class="option">
+                <input type="text" name="options[0][text]" placeholder="Option text" class="form-control mb-2" required>
+                <label>
+                    <input type="checkbox" name="options[0][is_correct]" value="1"> Correct
+                </label>
             </div>
         </div>
 
-        <button type="button" id="add-question" class="btn btn-primary mt-3">Add Question</button>
-        <button type="submit" class="btn btn-success mt-3">Create Quiz</button>
+        <button type="button" id="add-option" class="btn btn-secondary">Add Another Option</button>
+        <button type="submit" class="btn btn-primary mt-3">Save Question</button>
     </form>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const questionContainer = document.getElementById('question-container');
-            const addQuestionButton = document.getElementById('add-question');
-            let questionCount = 1;
-
-            addQuestionButton.addEventListener('click', () => {
-                const questionBlock = document.createElement('div');
-                questionBlock.classList.add('question-block');
-                questionBlock.innerHTML = `
-                    <div class="form-group">
-                        <label for="question${questionCount}">Question ${questionCount + 1}</label>
-                        <input type="text" name="questions[${questionCount}][text]" id="question${questionCount}" class="form-control" required>
-                    </div>
-                    <label>Choices</label>
-                    <div class="form-group">
-                        ${[0, 1, 2, 3].map(i => `
-                            <div class="form-check">
-                                <input type="radio" name="questions[${questionCount}][correct]" value="${i}" class="form-check-input" required>
-                                <input type="text" name="questions[${questionCount}][choices][]" class="form-control d-inline-block" placeholder="Choice ${i + 1}" required>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                questionContainer.appendChild(questionBlock);
-                questionCount++;
-            });
-        });
-    </script>
+<script>
+    let optionCount = 1;
+    document.getElementById('add-option').addEventListener('click', () => {
+        const container = document.getElementById('options-container');
+        const optionHTML = `
+            <div class="option">
+                <input type="text" name="options[${optionCount}][text]" placeholder="Option text" class="form-control mb-2" required>
+                <label>
+                    <input type="checkbox" name="options[${optionCount}][is_correct]" value="1"> Correct
+                </label>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', optionHTML);
+        optionCount++;
+    });
+</script>
 @endsection
