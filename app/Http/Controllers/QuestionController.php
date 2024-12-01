@@ -1,6 +1,9 @@
 <?php
 
-use App\Models\Question;
+namespace App\Http\Controllers;
+
+use App\Models\Question; // Import Question model
+use Illuminate\Http\Request; // Import Request class
 
 class QuestionController extends Controller
 {
