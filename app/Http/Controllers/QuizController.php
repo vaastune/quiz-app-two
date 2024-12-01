@@ -91,6 +91,13 @@ class QuizController extends Controller
 
     return redirect()->route('quizzes.index')->with('success', 'Quiz completed successfully!');
 }
+public function show($id)
+{
+    $quiz = Quiz::findOrFail($id);
+    $questions = $quiz->questions()->with('choices')->get();
+
+    return view('quizzes.take', compact('quiz', 'questions'));
+}
 
 
 
@@ -107,5 +114,16 @@ class QuizController extends Controller
 
     return redirect()->route('quizzes.index')->with('success', 'Quiz completed successfully!');
 }
+public function submitAnswers(Request $request, $id)
+{
+    $quiz = Quiz::findOrFail($id);
+    $answers = $request->input('answers');
+
+    // Add logic to evaluate answers and show results
+    // For simplicity, assuming that correct answers are marked in the database
+
+    return redirect()->route('quizzes.index')->with('success', 'Quiz submitted successfully!');
+}
+
 
 }
