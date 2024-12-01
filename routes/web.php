@@ -15,6 +15,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
 });
 
+Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
+Route::get('/quizzes/{id}/add-questions', [QuizController::class, 'addQuestions'])->name('quizzes.addQuestions');
+
 
 // Basic Auth Routes
 Auth::routes();

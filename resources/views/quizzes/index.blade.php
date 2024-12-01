@@ -4,7 +4,7 @@
     <h1>Quiz List</h1>
     <a href="{{ route('quizzes.create') }}" class="btn btn-primary">Create New Quiz</a>
 
-    <h2>Quizzes</h2>
+    <h2>Available Quizzes</h2>
     <ul>
         @foreach ($quizzes as $quiz)
             <li>
@@ -16,11 +16,10 @@
 
     <!-- Results Section -->
     <div class="container">
+        <h2>Your Results</h2>
         @if ($result)
-            <h1>Your Results</h1>
             <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
         @else
-            <h1>Your Results</h1>
             <p>You haven't completed any quizzes yet.</p>
         @endif
     </div>
