@@ -17,21 +17,37 @@
         <div class="mb-3">
             <label for="choice1" class="form-label">Choice 1</label>
             <input type="text" class="form-control" id="choice1" name="choices[]" required>
+            <div>
+                <label for="correct1" class="form-check-label">Is this the correct choice?</label>
+                <input type="checkbox" class="form-check-input" id="correct1" name="correct[]" value="1">
+            </div>
         </div>
 
         <div class="mb-3">
             <label for="choice2" class="form-label">Choice 2</label>
             <input type="text" class="form-control" id="choice2" name="choices[]" required>
+            <div>
+                <label for="correct2" class="form-check-label">Is this the correct choice?</label>
+                <input type="checkbox" class="form-check-input" id="correct2" name="correct[]" value="2">
+            </div>
         </div>
 
         <div class="mb-3">
             <label for="choice3" class="form-label">Choice 3</label>
             <input type="text" class="form-control" id="choice3" name="choices[]">
+            <div>
+                <label for="correct3" class="form-check-label">Is this the correct choice?</label>
+                <input type="checkbox" class="form-check-input" id="correct3" name="correct[]" value="3">
+            </div>
         </div>
 
         <div class="mb-3">
             <label for="choice4" class="form-label">Choice 4</label>
             <input type="text" class="form-control" id="choice4" name="choices[]">
+            <div>
+                <label for="correct4" class="form-check-label">Is this the correct choice?</label>
+                <input type="checkbox" class="form-check-input" id="correct4" name="correct[]" value="4">
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Add Question</button>

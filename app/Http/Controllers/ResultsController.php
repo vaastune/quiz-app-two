@@ -10,7 +10,10 @@ class ResultsController extends Controller
 {
     public function index()
     {
-        // Logic for displaying results (e.g., fetching the current user's results)
-        return view('results.index');
+        // Fetch all quizzes to show them on the results page
+        $quizzes = Quiz::all();
+
+        // Pass the quizzes variable to the view
+        return view('results.index', compact('quizzes'));
     }
 }
