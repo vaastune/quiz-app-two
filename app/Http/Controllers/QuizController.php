@@ -10,12 +10,12 @@ use App\Models\Result; // Import the Result model
 class QuizController extends Controller
 {
     public function index()
-    {
-        $quizzes = Quiz::all();
-        $result = auth()->user() ? auth()->user()->results()->latest()->first() : null; // Get the most recent result for the authenticated user
+{
+    $quizzes = Quiz::all(); // Get all quizzes
+    $result = auth()->user() ? auth()->user()->results()->latest()->first() : null; // Get the most recent result for the authenticated user
 
-        return view('quizzes.index', compact('quizzes', 'result'));
-    }
+    return view('results.index', compact('quizzes', 'result'));
+}
 
 
     public function show($id)
@@ -26,10 +26,12 @@ class QuizController extends Controller
         return view('quizzes.take', compact('quiz', 'questions'));
     }
 
-    public function create()
-    {
-        return view('quizzes.create');
-    }
+    public function create($quizId = null)
+{
+    $quiz = $quizId ? Quiz::findOrFail($quizId) : null; // Find the quiz if $quizId is provided
+
+    return view('quizzes.create', compact('quiz'));
+}
 
     public function store(Request $request)
     {

@@ -7,6 +7,7 @@
 
     <!-- Example for adding choices to a question -->
     <form action="{{ route('questions.store', ['quizId' => $quiz->id]) }}" method="post">
+
         @csrf
 
         <div id="question-container">
