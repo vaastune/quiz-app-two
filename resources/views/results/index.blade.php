@@ -1,35 +1,32 @@
-<!-- resources/views/results/index.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
+    <!-- Quiz List Section -->
     <div class="container">
-        <h1>Your Quiz Results</h1>
-        <h1 class="underlined">Quiz List</h1>
-        <h2 class="underlined">Available Quizzes</h2>
-        <h2 class="underlined">Your Results</h2>
+        <h1 style="text-decoration: underline;">Quiz List</h1>
+        <br>
+        <a href="{{ route('quizzes.create') }}" class="btn btn-primary mb-3">Create New Quiz</a>
+        <br>
+        <h2 style="text-decoration: underline;">Available Quizzes</h2>
+        <ul>
+            @foreach ($quizzes as $quiz)
+                <li>
+                    <a href="{{ route('quizzes.show', $quiz->id) }}">{{ $quiz->title }}</a>
+                    <a href="{{ route('quizzes.addQuestions', $quiz->id) }}" class="btn btn-sm btn-warning">Add Questions</a>
+                </li>
+            @endforeach
+        </ul>
+    </div>
 
-        @if($results->isEmpty())
-            <p>You have not taken any quizzes yet.</p>
+    <!-- Results Section -->
+    <div class="container mt-5">
+        <h2 style="text-decoration: underline;">Your Results</h2>
+        <br>
+        @if ($result)
+            <p>You scored {{ $result->score }} out of {{ $result->total }}.</p>
         @else
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Quiz</th>
-                        <th>Score</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($results as $result)
-                        <tr>
-                            <td>{{ $result->quiz->title }}</td>
-                            <td>{{ $result->score }}</td>
-                            <td>{{ $result->created_at->format('d-m-Y H:i') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <p>You haven't completed any quizzes yet.</p>
         @endif
+        <br>
     </div>
 @endsection
