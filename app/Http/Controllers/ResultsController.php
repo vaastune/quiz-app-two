@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\ResultsController;
 use Illuminate\Http\Request;
 use App\Models\Result; // Import the Result model
 use App\Models\Quiz;   // Import the Quiz model
@@ -9,10 +10,10 @@ use App\Models\Quiz;   // Import the Quiz model
 class ResultsController extends Controller
 {
     public function index()
-{
-    $result = auth()->user()->quizResults()->latest()->first();
-
-    return view('results.index', compact('result'));
+    {
+        // Logic for displaying results (e.g., fetching the current user's results)
+        return view('results.index');
+    }
 }
 
 }
