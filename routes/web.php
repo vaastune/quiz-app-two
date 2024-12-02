@@ -13,6 +13,7 @@ use App\Http\Controllers\QuestionController;
 Route::middleware('auth')->group(function () {
     Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
     Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+    Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
     Route::get('/quizzes/{id}/add-questions', [QuizController::class, 'addQuestions'])->name('quizzes.addQuestions');
     Route::post('/quizzes/{id}/store-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('quizzes.storeAdditionalQuestions');
     Route::post('/quizzes/{quiz}/submit', [QuizSubmissionController::class, 'store'])->name('quizzes.submit');

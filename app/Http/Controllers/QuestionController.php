@@ -14,19 +14,25 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'text' => 'required|string|max:255',
-            'options' => 'required|array|min:2',
-            'options.*.text' => 'required|string|max:255',
-            'options.*.is_correct' => 'nullable|boolean',
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'choices' => 'required|array|min:2',
+            'choices.*' => 'required|string|max:255',
         ]);
 
-        $question = Question::create(['text' => $validated['text']]);
+        $question = new Question();
+        $question->text = $request->input('question');
+        $question->save();
 
-        foreach ($validated['options'] as $option) {
-            $question->options()->create($option);
+        // Save choices for the question
+        foreach ($request->input('choices') as $choiceText) {
+            $question->choices()->create([
+                'text' => $choiceText,
+                'is_correct' => false, // Adjust based on your needs
+            ]);
         }
 
-        return redirect()->back()->with('success', 'Question and options saved successfully!');
+        return redirect()->route('quizzes.index')->with('success', 'Question created successfully!');
     }
+
 }
