@@ -45,37 +45,35 @@ public function index()
     return view('quizzes.take', compact('quiz', 'questions'));
 }
 
+public function storeAdditionalQuestions(Request $request, $id)
+{
+    $quiz = Quiz::findOrFail($id);
 
+    // Validate input data
+    $request->validate([
+        'question' => 'required|string|max:255',
+        'choices' => 'required|array|min:2|max:4', // Only allow up to 4 choices
+        'choices.*' => 'required|string|max:255',
+    ]);
 
-    public function storeAdditionalQuestions(Request $request, $id)
-    {
-        $quiz = Quiz::findOrFail($id);
+    // Create a new question and associate it with the quiz
+    $question = new Question();
+    $question->text = $request->input('question');
+    $question->quiz_id = $quiz->id;
+    $question->save();
 
-        // Validate the input data
-        $request->validate([
-            'question' => 'required|string|max:255',
-            'choices' => 'required|array|min:2',
-            'choices.*' => 'required|string|max:255',
-            'correct_choice' => 'required|in:0,' . implode(',', array_keys($request->input('choices'))),
+    // Save choices for the question
+    foreach ($request->input('choices') as $index => $choiceText) {
+        $isCorrect = false; // Logic for marking correct choice will be handled later
+        $question->choices()->create([
+            'text' => $choiceText,
+            'is_correct' => $isCorrect, // You can modify this to handle correct choice logic
         ]);
-
-        // Create a new question and associate it with the quiz
-        $question = $quiz->questions()->create([
-            'text' => $request->input('question'),
-        ]);
-
-        // Save choices for the question
-        foreach ($request->input('choices') as $index => $choiceText) {
-            $isCorrect = ($index == $request->input('correct_choice'));
-
-            $question->choices()->create([
-                'text' => $choiceText,
-                'is_correct' => $isCorrect,
-            ]);
-        }
-
-        return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
     }
+
+    return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
+}
+
 
     public function submitQuiz(Request $request, $id)
 {

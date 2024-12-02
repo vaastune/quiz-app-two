@@ -9,6 +9,8 @@
             <label for="question" class="form-label">Question</label>
             <input type="text" class="form-control" id="question" name="question" required>
         </div>
+
+        <!-- Choices inputs -->
         <div class="mb-3">
             <label for="choice1" class="form-label">Choice 1</label>
             <input type="text" class="form-control" id="choice1" name="choices[]" required>
@@ -17,11 +19,15 @@
             <label for="choice2" class="form-label">Choice 2</label>
             <input type="text" class="form-control" id="choice2" name="choices[]" required>
         </div>
-        <!-- Additional choices can be added as needed -->
         <div class="mb-3">
-            <label for="correct_choice" class="form-label">Correct Choice Index (0 for first, 1 for second, etc.)</label>
-            <input type="number" class="form-control" id="correct_choice" name="correct_choice" min="0" max="1" required>
+            <label for="choice3" class="form-label">Choice 3</label>
+            <input type="text" class="form-control" id="choice3" name="choices[]">
         </div>
+        <div class="mb-3">
+            <label for="choice4" class="form-label">Choice 4</label>
+            <input type="text" class="form-control" id="choice4" name="choices[]">
+        </div>
+
         <button type="submit" class="btn btn-primary">Add Question</button>
     </form>
 

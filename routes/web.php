@@ -15,7 +15,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
     Route::get('/quizzes/{id}/add-questions', [QuizController::class, 'addQuestions'])->name('quizzes.addQuestions');
-    Route::post('/quizzes/{id}/store-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('quizzes.storeAdditionalQuestions');
+    Route::post('/quizzes/{quizId}/store-questions', [QuestionController::class, 'store'])->name('questions.store');
     Route::post('/quizzes/{quiz}/submit', [QuizSubmissionController::class, 'store'])->name('quizzes.submit');
     Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name('quizzes.results');
     Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
