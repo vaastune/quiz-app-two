@@ -25,32 +25,30 @@ class QuizController extends Controller
         ]);
 
         // Loop through each question and save it along with choices
-        foreach ($request->input('questions') as $index => $questionText) {
-            $question = new Question();
-            $question->quiz_id = $quiz->id;
-            $question->question = $questionText;
-            $question->save();
+foreach ($request->input('questions') as $index => $questionText) {
+    $question = new Question();
+    $question->quiz_id = $quiz->id;
+    $question->question = $questionText;
+    $question->save();
 
-            // Get choices for the current question
-            $choices = $request->input('choices')[$index];
-            $correctChoiceIndex = $request->input('correct')[$index] - 1; // Convert 1-based to 0-based index
+    // Get choices for the current question
+    $choices = $request->input('choices')[$index];
+    $correctChoiceIndex = $request->input('correct')[$index] - 1; // Convert 1-based to 0-based index
 
-            // Add choices and set the correct answer flag
-            foreach ($choices as $choiceIndex => $choice) {
-                if (empty($choice)) {
-                    continue; // Skip empty choices
-                }
+    // Add choices and set the correct answer flag
+    foreach ($choices as $choiceIndex => $choice) {
+        // Ensure choice is not empty before creating
+        if (trim($choice) !== '') {
+            $isCorrect = $choiceIndex === $correctChoiceIndex;
 
-                $isCorrect = $choiceIndex === $correctChoiceIndex;
-
-                $question->choices()->create([
-                    'text' => $choice,
-                    'is_correct' => $isCorrect,
-                ]);
-            }
-
-
+            $question->choices()->create([
+                'text' => $choice,
+                'is_correct' => $isCorrect,
+            ]);
         }
+    }
+}
+
 
         return redirect()->route('quizzes.addQuestions', $quiz->id)
             ->with('success', 'Questions added successfully!');
