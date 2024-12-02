@@ -38,16 +38,12 @@ class QuizController extends Controller
     }
     public function takeQuiz($id)
 {
-    // Retrieve the quiz, including related questions and choices
-    $quiz = Quiz::with('questions.choices')->findOrFail($id);
+    $quiz = Quiz::findOrFail($id);
+    $questions = $quiz->questions()->with('choices')->get();
 
-    // Optionally, check if the user has already taken the quiz and display a message or redirect
-    if (auth()->check() && auth()->user()->quizzes()->where('quiz_id', $id)->exists()) {
-        return redirect()->route('quizzes.index')->with('info', 'You have already taken this quiz.');
-    }
-
-    return view('quizzes.take', compact('quiz'));
+    return view('quizzes.take', compact('quiz', 'questions'));
 }
+
 
 
     public function storeAdditionalQuestions(Request $request, $id)
@@ -118,12 +114,29 @@ public function submitAnswers(Request $request, $id)
 {
     $quiz = Quiz::findOrFail($id);
     $answers = $request->input('answers');
+    $totalQuestions = $quiz->questions()->count();
+    $correctAnswers = 0;
 
-    // Add logic to evaluate answers and show results
-    // For simplicity, assuming that correct answers are marked in the database
+    foreach ($quiz->questions as $question) {
+        $selectedChoiceId = $answers[$question->id] ?? null;
+        $choice = $question->choices()->find($selectedChoiceId);
+
+        if ($choice && $choice->is_correct) {
+            $correctAnswers++;
+        }
+    }
+
+    // Save the result to the database
+    Result::create([
+        'quiz_id' => $quiz->id,
+        'user_id' => auth()->id(),
+        'score' => $correctAnswers,
+        'total' => $totalQuestions,
+    ]);
 
     return redirect()->route('quizzes.index')->with('success', 'Quiz submitted successfully!');
 }
+
 
 
 }
