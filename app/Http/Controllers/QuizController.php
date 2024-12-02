@@ -18,9 +18,10 @@ public function index()
 
 
     // Method to show a form to create a new quiz
-    public function create()
+    public function create($quizId)
     {
-        return view('quizzes.create');
+        $quiz = Quiz::findOrFail($quizId);
+        return view('quizzes.create', compact('quiz'));
     }
 
     // Method to store a newly created quiz in the database
