@@ -10,5 +10,10 @@ class Question extends Model
     {
         return $this->belongsTo(Quiz::class);
     }
+    public function choices()
+{
+    return $this->hasMany(Choice::class);
+}
+
 }
 

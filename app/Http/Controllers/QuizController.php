@@ -24,9 +24,6 @@ class QuizController extends Controller
         'correct.*' => 'required|integer|min:1|max:4',
     ]);
 
-    // Debug: Check the structure of the input
-    dd($request->input('choices'));
-
     // Loop through each question and save it along with choices
     foreach ($request->input('questions') as $index => $questionText) {
         $question = new Question();
@@ -36,22 +33,10 @@ class QuizController extends Controller
 
         // Get choices for the current question
         $choices = $request->input('choices')[$index];
-
-        // Ensure that choices are not empty before saving
-        if (empty($choices)) {
-            return redirect()->route('quizzes.addQuestions', $quiz->id)
-                ->with('error', 'Each question must have at least one choice.');
-        }
-
         $correctChoiceIndex = $request->input('correct')[$index] - 1; // Convert 1-based to 0-based index
 
         // Add choices and set the correct answer flag
         foreach ($choices as $choiceIndex => $choice) {
-            if (empty($choice)) {
-                return redirect()->route('quizzes.addQuestions', $quiz->id)
-                    ->with('error', 'All choices must have a value.');
-            }
-
             $isCorrect = $choiceIndex === $correctChoiceIndex;
 
             $question->choices()->create([
@@ -64,6 +49,7 @@ class QuizController extends Controller
     return redirect()->route('quizzes.addQuestions', $quiz->id)
         ->with('success', 'Questions added successfully!');
 }
+
 
 
     public function index()
@@ -123,6 +109,14 @@ class QuizController extends Controller
 
         return view('quizzes.take', compact('quiz', 'questions'));
     }
+    public function takeQuiz($id)
+{
+    $quiz = Quiz::findOrFail($id);
+    $questions = $quiz->questions()->with('choices')->get();
+
+    return view('quizzes.take', compact('quiz', 'questions'));
+}
+
 
     public function completeQuiz($id)
     {
