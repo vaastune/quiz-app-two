@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Quiz List</h1>
+    <h1 style="text-decoration: underline;">Quiz List</h1>
     <a href="{{ route('quizzes.create') }}" class="btn btn-primary">Create New Quiz</a>
 
-    <h2>Available Quizzes</h2>
+    <h2 style="text-decoration: underline;">Available Quizzes</h2>
     <ul>
         @foreach ($quizzes as $quiz)
             <li>
@@ -15,8 +15,8 @@
     </ul>
 
     <!-- Results Section -->
-    <div class="container">
-        <h2>Your Results</h2>
+    <div class="container mt-4">
+        <h2 style="text-decoration: underline;">Your Results</h2>
         @if ($result)
             <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
         @else

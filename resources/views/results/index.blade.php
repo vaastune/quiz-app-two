@@ -5,6 +5,10 @@
 @section('content')
     <div class="container">
         <h1>Your Quiz Results</h1>
+        <h1 class="underlined">Quiz List</h1>
+        <h2 class="underlined">Available Quizzes</h2>
+        <h2 class="underlined">Your Results</h2>
+
         @if($results->isEmpty())
             <p>You have not taken any quizzes yet.</p>
         @else
