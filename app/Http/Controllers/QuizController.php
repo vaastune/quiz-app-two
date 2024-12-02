@@ -19,7 +19,7 @@ class QuizController extends Controller
             'questions.*' => 'required|string|max:255',
             'choices' => 'required|array|min:1|max:5',
             'choices.*' => 'required|array|min:2',
-            'choices.*.*' => 'nullable|string|max:255',
+            'choices.*.*' => 'required|string|max:255', // Each individual choice must be a non-empty string.
             'correct' => 'required|array|min:1|max:5',
             'correct.*' => 'required|integer|min:1|max:4',
         ]);
@@ -37,6 +37,10 @@ class QuizController extends Controller
 
             // Add choices and set the correct answer flag
             foreach ($choices as $choiceIndex => $choice) {
+                if (empty($choice)) {
+                    continue; // Skip empty choices
+                }
+
                 $isCorrect = $choiceIndex === $correctChoiceIndex;
 
                 $question->choices()->create([
@@ -44,6 +48,8 @@ class QuizController extends Controller
                     'is_correct' => $isCorrect,
                 ]);
             }
+
+
         }
 
         return redirect()->route('quizzes.addQuestions', $quiz->id)

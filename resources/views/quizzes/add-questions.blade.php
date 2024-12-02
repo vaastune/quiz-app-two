@@ -4,12 +4,15 @@
 <div class="container">
     <h1>Add Questions to Quiz: {{ $quiz->title }}</h1>
 
-    <!-- Display success message -->
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
     <form action="{{ route('quizzes.storeAdditionalQuestions', $quiz->id) }}" method="POST">
         @csrf
