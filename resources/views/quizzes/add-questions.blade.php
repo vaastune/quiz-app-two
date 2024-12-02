@@ -4,8 +4,43 @@
 
 <div class="container">
     <h1>Add Questions for Quiz: {{ $quiz->title }}</h1>
+    @extends('layouts.app')
 
+@section('content')
+<div class="container">
+    <h1>Add Question to {{ $quiz->title }}</h1>
+
+    <!-- Instructions (if applicable) -->
+    <p>Fill out the form below to add a question and its choices to the quiz.</p>
+
+    <!-- Form for adding a question -->
     <form action="{{ route('quizzes.storeAdditionalQuestions', $quiz->id) }}" method="POST">
+        @csrf
+        <div class="mb-3">
+            <label for="question" class="form-label">Question:</label>
+            <input type="text" name="question" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="choices" class="form-label">Choices:</label>
+            <input type="text" name="choices[]" class="form-control mb-2" required placeholder="Choice 1">
+            <input type="text" name="choices[]" class="form-control mb-2" required placeholder="Choice 2">
+            <input type="text" name="choices[]" class="form-control mb-2" placeholder="Choice 3">
+            <input type="text" name="choices[]" class="form-control mb-2" placeholder="Choice 4">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Question</button>
+    </form>
+
+    <!-- Save button for completing the quiz -->
+    <form action="{{ route('quizzes.complete', $quiz->id) }}" method="POST" class="mt-4">
+        @csrf
+        <button type="submit" class="btn btn-success">Save and Complete Quiz</button>
+    </form>
+</div>
+@endsection
+
+    {{-- <form action="{{ route('quizzes.storeAdditionalQuestions', $quiz->id) }}" method="POST">
         @csrf
 
         <div class="mb-3">
@@ -60,4 +95,4 @@
     </form>
 </div>
 
-@endsection
+@endsection --}}

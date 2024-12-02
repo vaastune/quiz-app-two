@@ -12,15 +12,15 @@ class CreateChoicesTable extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('choices', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
-            $table->string('text'); // The text of the choice
-            $table->boolean('is_correct')->default(false); // To indicate if this choice is the correct answer
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('choices', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('question_id')->constrained()->onDelete('cascade');
+        $table->string('text'); // Ensure this column exists
+        $table->timestamps();
+    });
+}
+
 
     /**
      * Reverse the migrations.
