@@ -13,31 +13,41 @@ class QuizController extends Controller
 {
     $quiz = Quiz::findOrFail($quizId);
 
-    // Validate the request data
+    // Validate the request data for 5 questions with choices and correct options
     $request->validate([
-        'question' => 'required|string|max:255', // Main question is required
-        'choices' => 'required|array|min:2',    // At least two choices are required
-        'choices.*' => 'required|string|max:255', // Each choice must be valid
-        'correct' => 'required|integer|min:1|max:' . count($request->input('choices')), // Ensure correct choice is within range
+        'questions' => 'required|array|min:1|max:5', // Up to 5 questions allowed
+        'questions.*' => 'required|string|max:255',  // Each question must be valid
+        'choices' => 'required|array|min:1|max:5',    // Choices array for each question
+        'choices.*' => 'required|array|min:2',        // Each question must have at least 2 choices
+        'choices.*.*' => 'required|string|max:255',   // Each choice text must be valid
+        'correct' => 'required|array|min:1|max:5',    // Correct choice array for each question
+        'correct.*' => 'required|integer|min:1|max:4', // Correct choice index for each question (1-4)
     ]);
 
-    // Create the question and associate it with the quiz
-    $question = new Question();
-    $question->quiz_id = $quiz->id;
-    $question->question = $request->input('question');
-    $question->save();
+    // Loop through each question and save it along with choices
+    foreach ($request->input('questions') as $index => $questionText) {
+        $question = new Question();
+        $question->quiz_id = $quiz->id;
+        $question->question = $questionText;
+        $question->save();
 
-    // Add choices to the question
-    foreach ($request->input('choices') as $index => $choice) {
-        $question->choices()->create([
-            'text' => $choice,
-            'is_correct' => ($request->input('correct') == $index + 1), // Match correct flag
-        ]);
+        // Get choices for the current question
+        $choices = $request->input('choices')[$index];
+        $correctChoiceIndex = $request->input('correct')[$index] - 1; // Convert 1-based to 0-based index
+
+        // Add choices and set the correct answer flag
+        foreach ($choices as $choiceIndex => $choice) {
+            $isCorrect = $choiceIndex === $correctChoiceIndex;
+            $question->choices()->create([
+                'text' => $choice,
+                'is_correct' => $isCorrect,
+            ]);
+        }
     }
 
-    // Redirect back to the add-question page with success message
-    return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
+    return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Questions added successfully!');
 }
+
 
 
     public function index()
@@ -75,10 +85,20 @@ class QuizController extends Controller
     }
 
     public function addQuestions($id)
-    {
-        $quiz = Quiz::findOrFail($id);
-        return view('quizzes.add-questions', compact('quiz'));
+{
+    $quiz = Quiz::findOrFail($id);
+
+    // Fetch existing questions to check if we already have 5 questions
+    $questions = $quiz->questions()->get();
+
+    // Check if there are already 5 questions; if so, redirect or show a message
+    if ($questions->count() >= 5) {
+        return redirect()->route('quizzes.show', $quiz->id)->with('error', 'You can only add up to 5 questions per quiz.');
     }
+
+    return view('quizzes.add-questions', compact('quiz', 'questions'));
+}
+
 
     public function takeQuiz($id)
     {

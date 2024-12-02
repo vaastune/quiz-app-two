@@ -13,31 +13,31 @@
 
     <form action="{{ route('quizzes.storeAdditionalQuestions', $quiz->id) }}" method="POST">
         @csrf
-        <div class="mb-3">
-            <label for="question" class="form-label">Question:</label>
-            <input type="text" name="question" class="form-control" required>
-        </div>
+        @for ($i = 0; $i < 5; $i++)
+            <div class="mb-3">
+                <label for="question_{{ $i }}" class="form-label">Question {{ $i + 1 }}:</label>
+                <input type="text" name="questions[{{ $i }}]" class="form-control" required>
+            </div>
 
-        <div class="mb-3">
-            <label for="choices" class="form-label">Choices:</label>
-            <input type="text" name="choices[]" class="form-control mb-2" required placeholder="Choice 1">
-            <input type="text" name="choices[]" class="form-control mb-2" required placeholder="Choice 2">
-            <input type="text" name="choices[]" class="form-control mb-2" required placeholder="Choice 3">
-            <input type="text" name="choices[]" class="form-control mb-2" required placeholder="Choice 4">
-        </div>
+            <div class="mb-3">
+                <label for="choices_{{ $i }}" class="form-label">Choices for Question {{ $i + 1 }}:</label>
+                @for ($j = 0; $j < 4; $j++)
+                    <input type="text" name="choices[{{ $i }}][] " class="form-control mb-2" required placeholder="Choice {{ $j + 1 }}">
+                @endfor
+            </div>
 
-        <div class="mb-3">
-            <label for="correct" class="form-label">Correct Choice:</label>
-            <select name="correct" class="form-select" required>
-                <option value="">Select the correct choice</option>
-                <option value="1">Choice 1</option>
-                <option value="2">Choice 2</option>
-                <option value="3">Choice 3</option>
-                <option value="4">Choice 4</option>
-            </select>
-        </div>
+            <div class="mb-3">
+                <label for="correct_{{ $i }}" class="form-label">Correct Choice for Question {{ $i + 1 }}:</label>
+                <select name="correct[{{ $i }}]" class="form-select" required>
+                    <option value="">Select the correct choice</option>
+                    @for ($j = 1; $j <= 4; $j++)
+                        <option value="{{ $j }}">Choice {{ $j }}</option>
+                    @endfor
+                </select>
+            </div>
+        @endfor
 
-        <button type="submit" class="btn btn-primary">Add Question</button>
+        <button type="submit" class="btn btn-primary">Add Questions</button>
     </form>
 
 </div>
