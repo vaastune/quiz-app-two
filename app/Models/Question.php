@@ -5,11 +5,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    protected $fillable = ['quiz_id', 'question']; // Ensure 'question' is fillable if you need mass assignment here.
-
-    public function choices()
+    // Define the relationship with the Quiz model (optional, for reverse lookup)
+    public function quiz()
     {
-        return $this->hasMany(Choice::class);
+        return $this->belongsTo(Quiz::class);
     }
 }
 

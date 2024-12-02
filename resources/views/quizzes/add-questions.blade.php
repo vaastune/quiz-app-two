@@ -13,32 +13,33 @@
 
     <form action="{{ route('quizzes.storeAdditionalQuestions', $quiz->id) }}" method="POST">
         @csrf
-        @for ($i = 0; $i < 5; $i++)
+        @foreach (range(1, 5) as $index)
             <div class="mb-3">
-                <label for="question_{{ $i }}" class="form-label">Question {{ $i + 1 }}:</label>
-                <input type="text" name="questions[{{ $i }}]" class="form-control" required>
+                <label for="question{{ $index }}" class="form-label">Question {{ $index }}:</label>
+                <input type="text" name="questions[]" class="form-control" required>
             </div>
 
             <div class="mb-3">
-                <label for="choices_{{ $i }}" class="form-label">Choices for Question {{ $i + 1 }}:</label>
-                @for ($j = 0; $j < 4; $j++)
-                    <input type="text" name="choices[{{ $i }}][] " class="form-control mb-2" required placeholder="Choice {{ $j + 1 }}">
-                @endfor
+                <label for="choices{{ $index }}" class="form-label">Choices:</label>
+                @foreach (range(1, 4) as $choiceIndex)
+                    <input type="text" name="choices[{{ $index - 1 }}][]" class="form-control mb-2" required placeholder="Choice {{ $choiceIndex }}">
+                @endforeach
             </div>
 
             <div class="mb-3">
-                <label for="correct_{{ $i }}" class="form-label">Correct Choice for Question {{ $i + 1 }}:</label>
-                <select name="correct[{{ $i }}]" class="form-select" required>
+                <label for="correct{{ $index }}" class="form-label">Correct Choice:</label>
+                <select name="correct[]" class="form-select" required>
                     <option value="">Select the correct choice</option>
-                    @for ($j = 1; $j <= 4; $j++)
-                        <option value="{{ $j }}">Choice {{ $j }}</option>
-                    @endfor
+                    @foreach (range(1, 4) as $choiceIndex)
+                        <option value="{{ $choiceIndex }}">{{ 'Choice ' . $choiceIndex }}</option>
+                    @endforeach
                 </select>
             </div>
-        @endfor
+        @endforeach
 
         <button type="submit" class="btn btn-primary">Add Questions</button>
     </form>
+
 
 </div>
 @endsection

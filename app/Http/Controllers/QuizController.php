@@ -10,43 +10,45 @@ use App\Models\Question;
 class QuizController extends Controller
 {
     public function storeAdditionalQuestions(Request $request, $quizId)
-{
-    $quiz = Quiz::findOrFail($quizId);
+    {
+        $quiz = Quiz::findOrFail($quizId);
 
-    // Validate the request data for 5 questions with choices and correct options
-    $request->validate([
-        'questions' => 'required|array|min:1|max:5', // Up to 5 questions allowed
-        'questions.*' => 'required|string|max:255',  // Each question must be valid
-        'choices' => 'required|array|min:1|max:5',    // Choices array for each question
-        'choices.*' => 'required|array|min:2',        // Each question must have at least 2 choices
-        'choices.*.*' => 'required|string|max:255',   // Each choice text must be valid
-        'correct' => 'required|array|min:1|max:5',    // Correct choice array for each question
-        'correct.*' => 'required|integer|min:1|max:4', // Correct choice index for each question (1-4)
-    ]);
+        // Validate the request data
+        $request->validate([
+            'questions' => 'required|array|min:1|max:5',
+            'questions.*' => 'required|string|max:255',
+            'choices' => 'required|array|min:1|max:5',
+            'choices.*' => 'required|array|min:2',
+            'choices.*.*' => 'nullable|string|max:255',
+            'correct' => 'required|array|min:1|max:5',
+            'correct.*' => 'required|integer|min:1|max:4',
+        ]);
 
-    // Loop through each question and save it along with choices
-    foreach ($request->input('questions') as $index => $questionText) {
-        $question = new Question();
-        $question->quiz_id = $quiz->id;
-        $question->question = $questionText;
-        $question->save();
+        // Loop through each question and save it along with choices
+        foreach ($request->input('questions') as $index => $questionText) {
+            $question = new Question();
+            $question->quiz_id = $quiz->id;
+            $question->question = $questionText;
+            $question->save();
 
-        // Get choices for the current question
-        $choices = $request->input('choices')[$index];
-        $correctChoiceIndex = $request->input('correct')[$index] - 1; // Convert 1-based to 0-based index
+            // Get choices for the current question
+            $choices = $request->input('choices')[$index];
+            $correctChoiceIndex = $request->input('correct')[$index] - 1; // Convert 1-based to 0-based index
 
-        // Add choices and set the correct answer flag
-        foreach ($choices as $choiceIndex => $choice) {
-            $isCorrect = $choiceIndex === $correctChoiceIndex;
-            $question->choices()->create([
-                'text' => $choice,
-                'is_correct' => $isCorrect,
-            ]);
+            // Add choices and set the correct answer flag
+            foreach ($choices as $choiceIndex => $choice) {
+                $isCorrect = $choiceIndex === $correctChoiceIndex;
+
+                $question->choices()->create([
+                    'text' => $choice,
+                    'is_correct' => $isCorrect,
+                ]);
+            }
         }
+
+        return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Questions added successfully!');
     }
 
-    return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Questions added successfully!');
-}
 
 
 
