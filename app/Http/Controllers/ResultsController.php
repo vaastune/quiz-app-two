@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\ResultsController;
 use Illuminate\Http\Request;
 use App\Models\Result; // Import the Result model
 use App\Models\Quiz;   // Import the Quiz model
@@ -14,6 +13,4 @@ class ResultsController extends Controller
         // Logic for displaying results (e.g., fetching the current user's results)
         return view('results.index');
     }
-}
-
 }

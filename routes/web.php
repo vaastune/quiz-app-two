@@ -12,9 +12,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/quizzes/{id}/add-questions', [QuizController::class, 'addQuestions'])->name('quizzes.addQuestions');
     Route::get('/quizzes/{id}/take', [QuizController::class, 'takeQuiz'])->name('quizzes.take');
     Route::post('/quizzes/{id}/submit', [QuizController::class, 'submitAnswers'])->name('quizzes.submitAnswers');
-    // Add this to your web.php if it doesn't exist
-Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
-
+    Route::post('/quizzes/{id}/complete', [QuizController::class, 'completeQuiz'])->name('quizzes.complete');
+    Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
+    Route::post('/quizzes/{id}/add-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('quizzes.storeAdditionalQuestions');
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
