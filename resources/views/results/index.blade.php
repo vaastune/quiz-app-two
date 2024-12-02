@@ -17,16 +17,16 @@
             @endforeach
         </ul>
     </div>
+    @extends('layouts.app')
 
-    <!-- Results Section -->
-    <div class="container mt-5">
-        <h2 style="text-decoration: underline;">Your Results</h2>
-        <br>
-        @if ($result)
-            <p>You scored {{ $result->score }} out of {{ $result->total }}.</p>
-        @else
-            <p>You haven't completed any quizzes yet.</p>
-        @endif
-        <br>
-    </div>
-@endsection
+    @section('content')
+        <!-- Results Section -->
+        <div class="container">
+            <h1 style="text-decoration: underline;">Your Results</h1>
+            @if ($result)
+                <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
+            @else
+                <p>You haven't completed any quizzes yet.</p>
+            @endif
+        </div>
+    @endsection
