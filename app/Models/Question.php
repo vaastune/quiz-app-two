@@ -7,13 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Question extends Model
 {
-    protected $fillable = ['text', 'quiz_id'];
+    protected $fillable = ['quiz_id', 'question'];
 
-    public function quiz()
-    {
-        return $this->belongsTo(Quiz::class);
-    }
-
+    // If you are using relationships:
     public function choices()
     {
         return $this->hasMany(Choice::class);
