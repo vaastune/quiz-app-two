@@ -2,18 +2,20 @@
 
 @section('content')
     <div class="container">
-        <h1 style="text-decoration: underline;">Your Quiz Results</h1>
+        <h1 style="text-decoration: underline;">Your Results</h1>
 
-        @if ($results->isEmpty())
+        <!-- Display a message if there are no results -->
+        @if (!isset($results) || $results->isEmpty())
             <p>You haven't completed any quizzes yet.</p>
         @else
+            <!-- Display a table of quiz results -->
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Quiz Title</th>
                         <th>Score</th>
                         <th>Total</th>
-                        <th>Test Date</th>
+                        <th>Date Taken</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,7 +24,7 @@
                             <td>{{ $result->quiz->title }}</td>
                             <td>{{ $result->score }}</td>
                             <td>{{ $result->total }}</td>
-                            <td>{{ $result->created_at->format('Y-m-d H:i:s') }}</td>
+                            <td>{{ $result->created_at->format('M d, Y h:i A') }}</td>
                         </tr>
                     @endforeach
                 </tbody>

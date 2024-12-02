@@ -1,32 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Quiz List Section -->
-    <div class="container">
-        <h1 style="text-decoration: underline;">Quiz List</h1>
-        <br>
-        <a href="{{ route('quizzes.create') }}" class="btn btn-primary mb-3">Create New Quiz</a>
-        <br>
-        <h2 style="text-decoration: underline;">Available Quizzes</h2>
-        <ul>
-            @foreach ($quizzes as $quiz)
-                <li>
-                    <a href="{{ route('quizzes.show', $quiz->id) }}">{{ $quiz->title }}</a>
-                    <a href="{{ route('quizzes.addQuestions', $quiz->id) }}" class="btn btn-sm btn-warning">Add Questions</a>
-                </li>
-            @endforeach
-        </ul>
-    </div>
-    @extends('layouts.app')
+<div class="container">
+    <h1 style="text-decoration: underline;">Your Results</h1>
 
-    @section('content')
-        <!-- Results Section -->
-        <div class="container">
-            <h1 style="text-decoration: underline;">Your Results</h1>
-            @if ($result)
-                <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
-            @else
-                <p>You haven't completed any quizzes yet.</p>
-            @endif
-        </div>
-    @endsection
+    @if ($results && $results->count() > 0)
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Quiz Title</th>
+                    <th>Score</th>
+                    <th>Total</th>
+                    <th>Date Taken</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($results as $result)
+                    <tr>
+                        <td>{{ $result->quiz->title }}</td>
+                        <td>{{ $result->score }}</td>
+                        <td>{{ $result->total }}</td>
+                        <td>{{ $result->created_at->format('M d, Y h:i A') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
+        <p>You haven't completed any quizzes yet.</p>
+    @endif
+</div>
+@endsection
