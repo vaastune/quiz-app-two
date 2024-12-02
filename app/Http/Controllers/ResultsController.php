@@ -10,12 +10,10 @@ class ResultsController extends Controller
 {
     public function index()
     {
-        // Fetch the current user's results (modify as needed for your application)
-        $result = Result::where('user_id', auth()->id())->latest()->first();
+        // Fetch all results for the authenticated user, ordered by the test date
+        $results = Result::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
 
-        // Pass both $result and $quizzes to the view
-        $quizzes = Quiz::all();
-
-        return view('results.index', compact('result', 'quizzes'));
+        // Pass the results to the view
+        return view('results.index', compact('results'));
     }
 }
