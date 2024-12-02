@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Result;
 use Illuminate\Http\Request;
 use App\Models\Quiz;
 use App\Models\Question;
@@ -11,8 +12,13 @@ class QuizController extends Controller
     public function index()
     {
         $quizzes = Quiz::all();
-        return view('quizzes.index', compact('quizzes'));
+
+        // Fetch the result for the currently authenticated user
+        $result = Result::where('user_id', auth()->id())->first(); // or use 'latest()' to get the most recent result
+
+        return view('quizzes.index', compact('quizzes', 'result'));
     }
+
 
     public function show($id)
     {
