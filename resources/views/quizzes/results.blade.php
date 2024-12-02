@@ -5,7 +5,6 @@
 <!-- Quiz List Section -->
 <div class="container">
     <h1 style="text-decoration: underline;">Quiz List</h1>
-
     <br>
     <a href="{{ route('quizzes.create') }}" class="btn btn-primary mb-3">Create New Quiz</a>
     <br>
@@ -24,7 +23,6 @@
 <!-- Results Section -->
 <div class="container mt-4">
     <h1 style="text-decoration: underline;">Your Results</h1>
-
     @if ($result)
         <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
     @else
