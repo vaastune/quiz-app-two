@@ -24,16 +24,12 @@ class QuizController extends Controller
             'correct.*' => 'required|integer|min:1|max:4',
         ]);
 
-
         // Loop through each question and save it along with choices
         foreach ($request->input('questions') as $index => $questionText) {
-            dd($questionText); // Check if this is what you expect
             $question = new Question();
             $question->quiz_id = $quiz->id;
             $question->question = $questionText;
             $question->save();
-        }
-
 
             // Get choices for the current question
             $choices = $request->input('choices')[$index];
