@@ -2,16 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Quiz extends Model
 {
-    protected $fillable = [
-        'title', // Add other attributes as needed, e.g., 'user_id' if you have that
-    ];
-    public function questions()
-{
-    return $this->hasMany(Question::class);
-}
+    use HasFactory;
 
+    protected $fillable = ['title', 'description']; // Add your fields here
 }
