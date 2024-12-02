@@ -14,7 +14,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/quizzes/{id}/submit', [QuizController::class, 'submitAnswers'])->name('quizzes.submitAnswers');
     Route::post('/quizzes/{id}/complete', [QuizController::class, 'completeQuiz'])->name('quizzes.complete');
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
-    Route::post('/quizzes/{id}/add-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('quizzes.storeAdditionalQuestions');
+    Route::post('/quizzes/{quiz}/add-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('quizzes.storeAdditionalQuestions');
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');

@@ -9,6 +9,30 @@ use App\Models\Question;
 
 class QuizController extends Controller
 {
+    public function storeAdditionalQuestions(Request $request, $quizId)
+    {
+        $quiz = Quiz::findOrFail($quizId);
+
+        // Validate the request data
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'choices.*' => 'required|string|max:255',
+        ]);
+
+        // Create the question and associate it with the quiz
+        $question = new Question();
+        $question->quiz_id = $quiz->id;
+        $question->question = $request->input('question');
+        $question->save();
+
+        // Add choices to the question (assuming a 'choices' field exists in the Question model)
+        foreach ($request->input('choices') as $choice) {
+            $question->choices()->create(['text' => $choice]);
+        }
+
+        return redirect()->route('quizzes.show', $quiz->id)->with('success', 'Question added successfully!');
+    }
+}
     public function index()
     {
         $quizzes = Quiz::all();
