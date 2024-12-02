@@ -32,7 +32,7 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.show', $quiz->id)->with('success', 'Question added successfully!');
     }
-}
+
     public function index()
     {
         $quizzes = Quiz::all();
@@ -42,7 +42,6 @@ class QuizController extends Controller
 
         return view('quizzes.index', compact('quizzes', 'result'));
     }
-
 
     public function show($id)
     {
@@ -83,13 +82,12 @@ class QuizController extends Controller
     }
 
     public function completeQuiz($id)
-{
-    $quiz = Quiz::findOrFail($id);
-    // Add any additional logic here as needed, such as marking the quiz as complete.
+    {
+        $quiz = Quiz::findOrFail($id);
+        // Add any additional logic here as needed, such as marking the quiz as complete.
 
-    return redirect()->route('quizzes.index')->with('success', 'Quiz completed successfully!');
-}
-
+        return redirect()->route('quizzes.index')->with('success', 'Quiz completed successfully!');
+    }
 
     public function submitAnswers(Request $request, $id)
     {
