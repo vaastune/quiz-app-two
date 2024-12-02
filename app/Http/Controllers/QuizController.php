@@ -7,7 +7,14 @@ use App\Models\Quiz; // Import the Quiz model
 
 class QuizController extends Controller
 {
-    // Method to display all quizzes and the latest result of the logged-in user
+// app/Http/Controllers/QuizController.php
+public function index()
+{
+    $quizzes = Quiz::all(); // Get all quizzes
+    $result = auth()->user() ? auth()->user()->quizResults()->latest()->first() : null; // Get the latest quiz result for the authenticated user
+
+    return view('quizzes.index', compact('quizzes', 'result'));
+}
 
 
     // Method to show a form to create a new quiz
