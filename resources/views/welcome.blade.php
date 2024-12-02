@@ -117,6 +117,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="quiz-list">
+                    @foreach($quizzes as $quiz)
+                        <div class="quiz-item">
+                            <img src="{{ asset('C:\Users\Ruth hp\quiz-app-two\images]\1.jpg') }}" alt="{{ $quiz->title }} image" class="quiz-image">
+                            <h3>{{ $quiz->title }}</h3>
+                            <a href="{{ route('quizzes.show', $quiz->id) }}" class="btn btn-primary">Take Quiz</a>
+                        </div>
+                    @endforeach
+                </div>
 
                 <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
                     <div class="text-center text-sm sm:text-left">
