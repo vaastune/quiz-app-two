@@ -10,37 +10,33 @@ use App\Models\Question;
 class QuizController extends Controller
 {
     public function storeAdditionalQuestions(Request $request, $quizId)
-    {
-        // Fetch the quiz by ID or fail if not found
-        $quiz = Quiz::findOrFail($quizId);
+{
+    $quiz = Quiz::findOrFail($quizId);
 
-        // Validate the request data
-        $request->validate([
-            'question' => 'required|string|max:255', // The main question is required
-            'choices' => 'required|array|min:2',    // At least two choices are required
-            'choices.*' => 'required|string|max:255', // Each choice must be a valid string
-            'correct' => 'required|integer|min:1|max:' . count($request->input('choices')), // Correct choice must be valid
+    // Validate the request data
+    $request->validate([
+        'question' => 'required|string|max:255',
+        'choices' => 'required|array|min:2',
+        'choices.*' => 'required|string|max:255',
+        'correct' => 'required|integer|min:1|max:' . count($request->input('choices')),
+    ]);
+
+    // Create the question
+    $question = new Question();
+    $question->quiz_id = $quiz->id;
+    $question->question = $request->input('question');
+    $question->save();
+
+    // Add choices to the question
+    foreach ($request->input('choices') as $index => $choice) {
+        $question->choices()->create([
+            'text' => $choice,
+            'is_correct' => ($request->input('correct') == $index + 1),
         ]);
-        dd($request->input('choices'));
-
-        // Create the question and associate it with the quiz
-        $question = new Question();
-        $question->quiz_id = $quiz->id; // Link the question to the quiz
-        $question->question = $request->input('question'); // Set the question text
-        $question->save();
-
-        // Add the choices for the question
-        foreach ($request->input('choices') as $index => $choice) {
-            $question->choices()->create([
-                'text' => $choice, // The choice text
-                'is_correct' => ($request->input('correct') == $index + 1), // Match the correct choice
-            ]);
-        }
-
-        // Redirect back with a success message
-        return redirect()->route('quizzes.show', $quiz->id)->with('success', 'Question added successfully!');
     }
 
+    return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
+}
 
 
 
