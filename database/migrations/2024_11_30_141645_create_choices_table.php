@@ -16,7 +16,7 @@ class CreateChoicesTable extends Migration
     Schema::create('choices', function (Blueprint $table) {
         $table->id();
         $table->foreignId('question_id')->constrained()->onDelete('cascade');
-        $table->string('text');
+        $table->string('text'); // Ensure this field is not nullable or has a valid default
         $table->boolean('is_correct')->default(false);
         $table->timestamps();
     });
