@@ -1,19 +1,15 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Question extends Model
 {
-    protected $fillable = ['quiz_id', 'question'];
+    protected $fillable = ['quiz_id', 'question']; // Ensure 'question' is fillable if you need mass assignment here.
 
-    // If you are using relationships:
     public function choices()
     {
         return $this->hasMany(Choice::class);
     }
-
-
 }
+

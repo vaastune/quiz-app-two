@@ -15,13 +15,13 @@ class QuizController extends Controller
 
     // Validate the request data
     $request->validate([
-        'question' => 'required|string|max:255',
-        'choices' => 'required|array|min:2',
-        'choices.*' => 'required|string|max:255',
-        'correct' => 'required|integer|min:1|max:' . count($request->input('choices')),
+        'question' => 'required|string|max:255', // Main question is required
+        'choices' => 'required|array|min:2',    // At least two choices are required
+        'choices.*' => 'required|string|max:255', // Each choice must be valid
+        'correct' => 'required|integer|min:1|max:' . count($request->input('choices')), // Ensure correct choice is within range
     ]);
 
-    // Create the question
+    // Create the question and associate it with the quiz
     $question = new Question();
     $question->quiz_id = $quiz->id;
     $question->question = $request->input('question');
@@ -31,13 +31,13 @@ class QuizController extends Controller
     foreach ($request->input('choices') as $index => $choice) {
         $question->choices()->create([
             'text' => $choice,
-            'is_correct' => ($request->input('correct') == $index + 1),
+            'is_correct' => ($request->input('correct') == $index + 1), // Match correct flag
         ]);
     }
 
+    // Redirect back to the add-question page with success message
     return redirect()->route('quizzes.addQuestions', $quiz->id)->with('success', 'Question added successfully!');
 }
-
 
 
     public function index()
