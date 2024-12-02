@@ -18,9 +18,10 @@
     <div class="container mt-4">
         <h2 style="text-decoration: underline;">Your Results</h2>
         @if ($result)
-            <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
-        @else
-            <p>You haven't completed any quizzes yet.</p>
-        @endif
+    <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
+@else
+    <p>You haven't completed any quizzes yet.</p>
+@endif
+
     </div>
 @endsection

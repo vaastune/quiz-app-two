@@ -12,8 +12,11 @@ class QuizController extends Controller
     public function index()
     {
         $quizzes = Quiz::all();
-        return view('quizzes.index', compact('quizzes'));
+        $result = auth()->user() ? auth()->user()->results()->latest()->first() : null; // Get the most recent result for the authenticated user
+
+        return view('quizzes.index', compact('quizzes', 'result'));
     }
+
 
     public function show($id)
     {

@@ -27,9 +27,10 @@ class User extends Authenticatable
      * Get the results associated with the user.
      */
     public function results()
-    {
-        return $this->hasMany(Result::class); // Adjust based on your database design
-    }
+{
+    return $this->hasMany(Result::class);
+}
+
 
     public function quizResults()
 {
