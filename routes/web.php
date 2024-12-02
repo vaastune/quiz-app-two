@@ -44,3 +44,7 @@ Route::get('/results', [ResultsController::class, 'index'])->name('results.index
 
 // Resource route for quizzes (handles index, show, edit, update, destroy)
 Route::resource('quizzes', QuizController::class);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
