@@ -76,17 +76,37 @@ foreach ($request->input('questions') as $index => $questionText) {
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'questions' => 'required|array|min:1|max:5',
+        'questions.*' => 'required|string|max:255',
+        'choices' => 'required|array|min:1|max:5',
+        'choices.*' => 'required|array|min:2',
+        'choices.*.*' => 'nullable|string|max:255',
+        'correct' => 'required|array|min:1|max:5',
+        'correct.*' => 'required|integer|min:1|max:4',
+    ]);
 
-        Quiz::create([
-            'title' => $request->title,
-        ]);
+    $quiz = Quiz::create(['title' => $request->input('title')]);
 
-        return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
+    foreach ($request->input('questions') as $index => $questionText) {
+        $question = $quiz->questions()->create(['question' => $questionText]);
+
+        foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
+            if (trim($choiceText) !== '') {
+                $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
+                $question->choices()->create([
+                    'text' => $choiceText,
+                    'is_correct' => $isCorrect,
+                ]);
+            }
+        }
     }
+
+    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
+}
+
 
     public function addQuestions($id)
     {
@@ -118,6 +138,14 @@ foreach ($request->input('questions') as $index => $questionText) {
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz completed successfully!');
     }
+    public function destroy($id)
+{
+    $quiz = Quiz::findOrFail($id);
+    $quiz->delete();
+
+    return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
+}
+
 
     public function submitAnswers(Request $request, $id)
     {

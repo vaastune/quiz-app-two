@@ -1,26 +1,41 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1 style="text-decoration: underline;">Quiz List</h1>
-    <a href="{{ route('quizzes.create') }}" class="btn btn-primary">Create New Quiz</a>
+    <div class="container">
+        <h1 class="mb-4" style="text-decoration: underline;">Quiz List</h1>
+        <a href="{{ route('quizzes.create') }}" class="btn btn-primary mb-4">Create New Quiz</a>
 
-    <h2 style="text-decoration: underline;">Available Quizzes</h2>
-    <ul>
-        @foreach ($quizzes as $quiz)
-            <li>
-                <a href="{{ route('quizzes.show', $quiz->id) }}">{{ $quiz->title }}</a>
-                <a href="{{ route('quizzes.addQuestions', $quiz->id) }}" class="btn btn-sm btn-warning">Add Questions</a>
-            </li>
-        @endforeach
-    </ul>
-
-    <!-- Results Section -->
-    <div class="container mt-4">
-        <h2 style="text-decoration: underline;">Your Results</h2>
-        @if ($result)
-            <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
-        @else
-            <p>You haven't completed any quizzes yet.</p>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
         @endif
+
+        <h2 style="text-decoration: underline;">Available Quizzes</h2>
+        <div class="list-group">
+            @forelse ($quizzes as $quiz)
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><strong>{{ $quiz->title }}</strong></span>
+                    <form method="POST" action="{{ route('quizzes.destroy', $quiz->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</button>
+                    </form>
+                </div>
+            @empty
+                <p>No quizzes available yet. Create one!</p>
+            @endforelse
+        </div>
+
+        <!-- Results Section -->
+        <div class="mt-5">
+            <h2 style="text-decoration: underline;">Your Results</h2>
+            @if ($result)
+                <p>Congratulations! You scored {{ $result->score }} out of {{ $result->total }}.</p>
+            @else
+                <p>You haven't completed any quizzes yet.</p>
+            @endif
+        </div>
     </div>
 @endsection
