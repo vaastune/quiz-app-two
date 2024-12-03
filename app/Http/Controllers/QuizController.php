@@ -75,72 +75,60 @@ foreach ($request->input('questions') as $index => $questionText) {
         return view('quizzes.create');
     }
 
-    public function store(Request $request)
-    {
-        // Log the input data for debugging purposes
-        \Log::info('Questions:', $request->input('questions'));
-        \Log::info('Choices:', $request->input('choices'));
-        \Log::info('Choices for question ' . $index, $request->input('choices')[$index]);
+    // The store method
+public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'questions' => 'required|array|min:1|max:5',
+        'questions.*' => 'required|string|max:255',
+        'choices' => 'required|array|min:1|max:5',
+        'choices.*' => 'required|array|min:2',
+        'choices.*.*' => 'nullable|string|max:255',
+        'correct' => 'required|array|min:1|max:5',
+        'correct.*' => 'required|integer|min:1|max:4',
+    ]);
 
-        // Check if the request contains questions and choices
-        // if (!$request->has('questions') || !$request->has('choices')) {
-        //     return back()->withErrors(['error' => 'Questions and choices are required']);
-        // }
+    // Create a new quiz entry
+    $quiz = Quiz::create(['title' => $request->input('title')]);
 
-        // Validate the incoming request data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'questions' => 'required|array|min:1|max:5',
-            'questions.*' => 'required|string|max:255',
-            'choices' => 'required|array|min:1|max:5',
-            'choices.*' => 'required|array|min:2',
-            'choices.*.*' => 'nullable|string|max:255',
-            'correct' => 'required|array|min:1|max:5',
-            'correct.*' => 'required|integer|min:1|max:4',
-        ]);
+    // Iterate through each question and add it to the quiz
+    foreach ($request->input('questions') as $index => $questionText) {
+        $question = $quiz->questions()->create(['question' => $questionText]);
 
-        // Create a new quiz entry
-        $quiz = Quiz::create(['title' => $request->input('title')]);
+        // Iterate through each choice for the current question
+        foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
+            if (trim($choiceText) !== '') {
+                // Determine if this choice is correct
+                $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
 
-        // Iterate through each question and add it to the quiz
-        foreach ($request->input('questions') as $index => $questionText) {
-            $question = $quiz->questions()->create(['question' => $questionText]);
-
-            // Iterate through each choice for the current question
-            foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
-                if (!empty(trim($choiceText))) {
-                    $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
-                    $question->choices()->create([
-                        'text' => $choiceText,
-                        'is_correct' => $isCorrect,
-                    ]);
-                }
+                $question->choices()->create([
+                    'text' => $choiceText,
+                    'is_correct' => $isCorrect,
+                ]);
             }
-
-
-        // Redirect back to the quiz index page with a success message
-        return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
-    }
-
-
-//     return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
-// }
-
-
-    public function addQuestions($id)
-    {
-        $quiz = Quiz::findOrFail($id);
-
-        // Fetch existing questions to check if we already have 5 questions
-        $questions = $quiz->questions()->get();
-
-        // Check if there are already 5 questions; if so, redirect or show a message
-        if ($questions->count() >= 5) {
-            return redirect()->route('quizzes.show', $quiz->id)->with('error', 'You can only add up to 5 questions per quiz.');
         }
-
-        return view('quizzes.add-questions', compact('quiz', 'questions'));
     }
+
+    // Redirect back to the quiz index page with a success message
+    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
+}
+
+// The addQuestions method should start here, after the closing brace of the store method
+public function addQuestions($id)
+{
+    $quiz = Quiz::findOrFail($id);
+
+    // Fetch existing questions to check if we already have 5 questions
+    $questions = $quiz->questions()->get();
+
+    // Check if there are already 5 questions; if so, redirect or show a message
+    if ($questions->count() >= 5) {
+        return redirect()->route('quizzes.show', $quiz->id)->with('error', 'You can only add up to 5 questions per quiz.');
+    }
+
+    return view('quizzes.add-questions', compact('quiz', 'questions'));
+}
 
     public function takeQuiz($id)
     {
