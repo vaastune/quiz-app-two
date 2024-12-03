@@ -65,10 +65,12 @@ foreach ($request->input('questions') as $index => $questionText) {
     }
 
     public function show($id)
-    {
-        $quiz = Quiz::findOrFail($id);
-        return view('quizzes.show', compact('quiz'));
-    }
+{
+    $quiz = Quiz::with('questions.choices')->findOrFail($id);
+
+    return view('quizzes.show', compact('quiz'));
+}
+
 
     public function create()
     {
@@ -94,7 +96,11 @@ public function store(Request $request)
     foreach ($request->input('questions') as $index => $questionText) {
         \Log::info('Creating question with data:', ['question_text' => $questionText]);
 
-        $question = $quiz->questions()->create(['question' => $questionText]);
+        $question = $quiz->questions()->create([
+            'question' => $questionText,
+            'quiz_id' => $quiz->id, // Ensure this value matches the quiz ID
+        ]);
+
 
         foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
             \Log::info('Creating choice with data:', ['choice_text' => $choiceText]);
