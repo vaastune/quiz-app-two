@@ -12,11 +12,7 @@
             @endforeach
         </ul>
     </div>
-@endforeach
-
-            </div>
-        @endforeach
-        <button type="submit" class="btn btn-primary mt-3">Submit Quiz</button>
-    </form>
+    @endforeach <!-- This should match the opening @foreach loop -->
+    <button type="submit" class="btn btn-primary mt-3">Submit Quiz</button>
 </div>
 @endsection
