@@ -76,36 +76,55 @@ foreach ($request->input('questions') as $index => $questionText) {
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'questions' => 'required|array|min:1|max:5',
-        'questions.*' => 'required|string|max:255',
-        'choices' => 'required|array|min:1|max:5',
-        'choices.*' => 'required|array|min:2',
-        'choices.*.*' => 'nullable|string|max:255',
-        'correct' => 'required|array|min:1|max:5',
-        'correct.*' => 'required|integer|min:1|max:4',
-    ]);
+    {
+        // Log the input data for debugging purposes
+        \Log::info('Questions:', $request->input('questions'));
+        \Log::info('Choices:', $request->input('choices'));
 
-    $quiz = Quiz::create(['title' => $request->input('title')]);
+        // Check if the request contains questions and choices
+        if (!$request->has('questions') || !$request->has('choices')) {
+            return back()->withErrors(['error' => 'Questions and choices are required']);
+        }
 
-    foreach ($request->input('questions') as $index => $questionText) {
-        $question = $quiz->questions()->create(['question' => $questionText]);
+        // Validate the incoming request data
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'questions' => 'required|array|min:1|max:5',
+            'questions.*' => 'required|string|max:255',
+            'choices' => 'required|array|min:1|max:5',
+            'choices.*' => 'required|array|min:2',
+            'choices.*.*' => 'nullable|string|max:255',
+            'correct' => 'required|array|min:1|max:5',
+            'correct.*' => 'required|integer|min:1|max:4',
+        ]);
 
-        foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
-            if (trim($choiceText) !== '') {
-                $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
-                $question->choices()->create([
-                    'text' => $choiceText,
-                    'is_correct' => $isCorrect,
-                ]);
+        // Create a new quiz entry
+        $quiz = Quiz::create(['title' => $request->input('title')]);
+
+        // Iterate through each question and add it to the quiz
+        foreach ($request->input('questions') as $index => $questionText) {
+            $question = $quiz->questions()->create(['question' => $questionText]);
+
+            // Iterate through each choice for the current question
+            foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
+                if (trim($choiceText) !== '') {
+                    // Determine if this choice is correct
+                    $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
+                    $question->choices()->create([
+                        'text' => $choiceText,
+                        'is_correct' => $isCorrect,
+                    ]);
+                }
             }
         }
+
+        // Redirect back to the quiz index page with a success message
+        return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
     }
 
-    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
-}
+
+//     return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
+// }
 
 
     public function addQuestions($id)

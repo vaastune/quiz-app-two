@@ -10,9 +10,11 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('text')->nullable();
+            $table->string('question'); // Ensure this matches what you use in the code.
+            $table->foreignId('quiz_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
+
     }
 
     public function down()
