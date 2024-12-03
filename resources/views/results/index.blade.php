@@ -4,6 +4,9 @@
 <div class="container">
     <h1 style="text-decoration: underline;">Your Results</h1>
 
+    <!-- Display the username of the currently authenticated user -->
+    <p>Welcome, {{ auth()->user()->name }}!</p>
+
     @if ($results && $results->count() > 0)
         <table class="table">
             <thead>
