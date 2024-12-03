@@ -8,7 +8,7 @@
     <a href="{{ route('quizzes.index') }}" class="btn btn-primary">Start Quizzing</a>
 
     <footer class="mt-4 text-center">
-        <p>&copy; {{ date('Y') }} All rights reserved.</p>
+        <p>&copy; {{ date('2024') }} All rights reserved.</p>
     </footer>
 
 </div>
