@@ -145,6 +145,41 @@ foreach ($request->input('questions') as $index => $questionText) {
 
     return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
 }
+public function take($id)
+{
+    $quiz = Quiz::with('questions.choices')->findOrFail($id);
+
+    return view('quizzes.take', compact('quiz'));
+}
+
+public function submit(Request $request, $id)
+{
+    $quiz = Quiz::findOrFail($id);
+    $request->validate([
+        'answers' => 'required|array',
+        'answers.*' => 'required|integer',
+    ]);
+
+    $questions = $quiz->questions;
+    $score = 0;
+
+    foreach ($questions as $question) {
+        $correctChoice = $question->choices()->where('is_correct', true)->first();
+        if ($request->input("answers.{$question->id}") == $correctChoice->id) {
+            $score++;
+        }
+    }
+
+    Result::create([
+        'user_id' => auth()->id(),
+        'quiz_id' => $quiz->id,
+        'score' => $score,
+        'total' => $questions->count(),
+    ]);
+
+    return redirect()->route('quizzes.index')->with('success', 'Your answers have been recorded!');
+}
+
 
 
     public function submitAnswers(Request $request, $id)
