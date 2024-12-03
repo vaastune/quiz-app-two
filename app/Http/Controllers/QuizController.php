@@ -80,6 +80,7 @@ foreach ($request->input('questions') as $index => $questionText) {
         // Log the input data for debugging purposes
         \Log::info('Questions:', $request->input('questions'));
         \Log::info('Choices:', $request->input('choices'));
+        \Log::info('Choices for question ' . $index, $request->input('choices')[$index]);
 
         // Check if the request contains questions and choices
         // if (!$request->has('questions') || !$request->has('choices')) {
@@ -107,8 +108,7 @@ foreach ($request->input('questions') as $index => $questionText) {
 
             // Iterate through each choice for the current question
             foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
-                if (trim($choiceText) !== '') {
-                    // Determine if this choice is correct
+                if (!empty(trim($choiceText))) {
                     $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
                     $question->choices()->create([
                         'text' => $choiceText,
@@ -116,7 +116,7 @@ foreach ($request->input('questions') as $index => $questionText) {
                     ]);
                 }
             }
-        }
+
 
         // Redirect back to the quiz index page with a success message
         return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');

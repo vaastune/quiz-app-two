@@ -12,16 +12,15 @@ class CreateChoicesTable extends Migration
      * @return void
      */
     public function up()
-{
-    Schema::create('choices', function (Blueprint $table) {
-        $table->text('text')->nullable()->change();
-        $table->id();
-        $table->foreignId('question_id')->constrained()->onDelete('cascade');
-        $table->string('text'); // Ensure this field exists and is not nullable
-        $table->boolean('is_correct')->default(false); // Default value if needed
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('choices', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('question_id')->constrained()->onDelete('cascade');
+            $table->text('text')->nullable(); // Make 'text' nullable if needed
+            $table->boolean('is_correct')->default(false); // Default value if needed
+            $table->timestamps();
+        });
+    }
 
     public function down()
     {
