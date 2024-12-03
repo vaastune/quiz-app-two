@@ -82,9 +82,9 @@ foreach ($request->input('questions') as $index => $questionText) {
         \Log::info('Choices:', $request->input('choices'));
 
         // Check if the request contains questions and choices
-        if (!$request->has('questions') || !$request->has('choices')) {
-            return back()->withErrors(['error' => 'Questions and choices are required']);
-        }
+        // if (!$request->has('questions') || !$request->has('choices')) {
+        //     return back()->withErrors(['error' => 'Questions and choices are required']);
+        // }
 
         // Validate the incoming request data
         $request->validate([
