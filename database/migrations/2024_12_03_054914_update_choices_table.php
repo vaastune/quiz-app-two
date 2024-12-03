@@ -5,10 +5,17 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateChoicesTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+
+{
     public function up()
     {
         Schema::table('choices', function (Blueprint $table) {
-            $table->text('text')->nullable()->change(); // Alter existing column to make it nullable
+            $table->text('text')->default('')->nullable()->change();
         });
     }
 

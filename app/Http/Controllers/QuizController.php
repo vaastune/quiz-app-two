@@ -89,33 +89,27 @@ public function store(Request $request)
         'correct.*' => 'required|integer|min:1|max:4',
     ]);
 
-    // Create a new quiz entry
     $quiz = Quiz::create(['title' => $request->input('title')]);
 
-    // Iterate through each question and add it to the quiz
-    // Iterate through each question and add it to the quiz
-foreach ($request->input('questions') as $index => $questionText) {
-    // Log the question text before creating the question
-    \Log::info('Creating question with data:', ['question_text' => $questionText]);
+    foreach ($request->input('questions') as $index => $questionText) {
+        \Log::info('Creating question with data:', ['question_text' => $questionText]);
 
-    $question = $quiz->questions()->create(['question' => $questionText]);
+        $question = $quiz->questions()->create(['question' => $questionText]);
 
-    // Iterate through each choice for the current question
-    foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
-        if (trim($choiceText) !== '') {
-            // Determine if this choice is correct
-            $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
+        foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
+            \Log::info('Creating choice with data:', ['choice_text' => $choiceText]);
 
-            $question->choices()->create([
-                'text' => $choiceText,
-                'is_correct' => $isCorrect,
-            ]);
+            if (trim($choiceText) !== '') {
+                $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
+
+                $question->choices()->create([
+                    'text' => $choiceText,
+                    'is_correct' => $isCorrect,
+                ]);
+            }
         }
     }
-}
 
-
-    // Redirect back to the quiz index page with a success message
     return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
 }
 
