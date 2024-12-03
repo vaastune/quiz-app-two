@@ -17,7 +17,11 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';
+
+     // In app/Providers/RouteServiceProvider.php
+        public const HOME = '/welcome'; // Set the desired home route here
+
+    // public const HOME = '/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

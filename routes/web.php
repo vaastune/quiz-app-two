@@ -13,7 +13,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/quizzes/{quiz}/take', [QuizController::class, 'take'])->name('quizzes.take');
     Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
-
+    Route::get('/welcome', [WelcomeController::class, 'index'])->name('welcome');
     // Question Management
     Route::get('/quizzes/{quiz}/add-questions', [QuizController::class, 'addQuestions'])->name('quizzes.addQuestions');
     Route::post('/quizzes/{quiz}/add-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('quizzes.storeAdditionalQuestions');

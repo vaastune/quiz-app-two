@@ -66,7 +66,10 @@ foreach ($request->input('questions') as $index => $questionText) {
 
     public function show($id)
 {
-    $quiz = Quiz::with('questions')->findOrFail($id);
+    $quiz = Quiz::with('questions.choices')->findOrFail($id);
+
+    // Debug output
+    dd($quiz);
 
     return view('quizzes.show', compact('quiz'));
 }
