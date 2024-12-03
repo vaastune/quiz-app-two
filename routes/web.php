@@ -19,7 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/quizzes/{quiz}/store-additional-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('quizzes.storeAdditionalQuestions');
     Route::post('/quizzes/{quiz}/complete', [QuizController::class, 'completeQuiz'])->name('quizzes.complete');
     Route::post('/quizzes/{id}/submit', [QuizController::class, 'submitAnswers'])->name('quizzes.submit');
-
+    Route::resource('quizzes', QuizController::class);
+    Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
 
 });
 
