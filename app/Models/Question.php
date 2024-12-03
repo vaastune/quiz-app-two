@@ -14,6 +14,7 @@ class Question extends Model
 {
     return $this->hasMany(Choice::class);
 }
+protected $fillable = ['question', 'quiz_id'];
 
 }
 

@@ -21,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/quizzes/{id}/submit', [QuizController::class, 'submitAnswers'])->name('quizzes.submit');
     Route::resource('quizzes', QuizController::class);
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
+    Route::get('/quizzes/{quiz}/take', [QuizController::class, 'take'])->name('quizzes.take');
+    Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+
 
 });
 

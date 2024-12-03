@@ -16,12 +16,18 @@
             @forelse ($quizzes as $quiz)
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <span><strong>{{ $quiz->title }}</strong></span>
-                    <form method="POST" action="{{ route('quizzes.destroy', $quiz->id) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</button>
-                    </form>
+                    <div>
+                        <!-- Take Quiz Button -->
+                        <a href="{{ route('quizzes.take', $quiz->id) }}" class="btn btn-success btn-sm">Take Quiz</a>
+
+                        <!-- Delete Quiz Form -->
+                        <form method="POST" action="{{ route('quizzes.destroy', $quiz->id) }}" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this quiz?')">Delete</button>
+                        </form>
+                    </div>
                 </div>
             @empty
                 <p>No quizzes available yet. Create one!</p>

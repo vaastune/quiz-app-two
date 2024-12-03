@@ -155,6 +155,7 @@ public function take($id)
 public function submit(Request $request, $id)
 {
     $quiz = Quiz::findOrFail($id);
+
     $request->validate([
         'answers' => 'required|array',
         'answers.*' => 'required|integer',
@@ -179,6 +180,7 @@ public function submit(Request $request, $id)
 
     return redirect()->route('quizzes.index')->with('success', 'Your answers have been recorded!');
 }
+
 
 
 
