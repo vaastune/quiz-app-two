@@ -9,10 +9,10 @@ use App\Models\Quiz; // Import the Quiz model
 class ResultsController extends Controller
 {
     public function index()
-    {
-        $user = auth()->user();
-        $results = $user->results; // Assuming a 'results' relationship exists on the User model
+{
+    // Fetch the current user's results
+    $results = Result::where('user_id', auth()->id())->latest()->get();
+    return view('results.index', compact('results'));
+}
 
-        return view('results.index', compact('results'));
-    }
 }
