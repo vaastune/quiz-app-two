@@ -93,22 +93,27 @@ public function store(Request $request)
     $quiz = Quiz::create(['title' => $request->input('title')]);
 
     // Iterate through each question and add it to the quiz
-    foreach ($request->input('questions') as $index => $questionText) {
-        $question = $quiz->questions()->create(['question' => $questionText]);
+    // Iterate through each question and add it to the quiz
+foreach ($request->input('questions') as $index => $questionText) {
+    // Log the question text before creating the question
+    \Log::info('Creating question with data:', ['question_text' => $questionText]);
 
-        // Iterate through each choice for the current question
-        foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
-            if (trim($choiceText) !== '') {
-                // Determine if this choice is correct
-                $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
+    $question = $quiz->questions()->create(['question' => $questionText]);
 
-                $question->choices()->create([
-                    'text' => $choiceText,
-                    'is_correct' => $isCorrect,
-                ]);
-            }
+    // Iterate through each choice for the current question
+    foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
+        if (trim($choiceText) !== '') {
+            // Determine if this choice is correct
+            $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
+
+            $question->choices()->create([
+                'text' => $choiceText,
+                'is_correct' => $isCorrect,
+            ]);
         }
     }
+}
+
 
     // Redirect back to the quiz index page with a success message
     return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
