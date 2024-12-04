@@ -1,6 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
+    <h2>Quizzes</h2>
+    <a href="{{ route('quizzes.create') }}" class="btn btn-primary mb-3">Create New Quiz</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($quizzes as $quiz)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $quiz->title }}</td>
+                    <td>
+                        <a href="{{ route('quizzes.edit', $quiz->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+@endsection
+
+
+{{-- @extends('layouts.app')
+
+@section('content')
     <div class="container">
         <h1 class="mb-4" style="text-decoration: underline;">Quiz List</h1>
         <a href="{{ route('quizzes.create') }}" class="btn btn-primary mb-4">Create New Quiz</a>
@@ -44,4 +78,4 @@
             @endif
         </div>
     </div>
-@endsection
+@endsection --}}

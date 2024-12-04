@@ -73,6 +73,12 @@ foreach ($request->input('questions') as $index => $questionText) {
 
     return view('quizzes.show', compact('quiz'));
 }
+    public function update(Request $request, $id)
+    {
+        $quiz = Quiz::findOrFail($id);
+        $quiz->update($request->only('title')); // Update only the title
+        return redirect()->route('quizzes.index')->with('success', 'Quiz updated successfully!');
+    }
 
 
 
@@ -161,6 +167,13 @@ public function addQuestions($id)
 
     return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
 }
+
+public function edit($id)
+{
+    $quiz = Quiz::findOrFail($id); // Fetch the quiz by ID
+    return view('quizzes.edit', compact('quiz')); // Return edit view
+}
+
 public function take($id)
 {
     $quiz = Quiz::with('questions.choices')->findOrFail($id);
