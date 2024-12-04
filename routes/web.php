@@ -14,7 +14,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 // Authenticated User Routes
+
 Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+
     // Dashboard
     Route::get('/dashboard', function () {
         return view('dashboard');

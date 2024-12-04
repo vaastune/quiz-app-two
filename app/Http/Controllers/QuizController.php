@@ -209,6 +209,11 @@ public function submit(Request $request, $id)
 
     return redirect()->route('quizzes.index')->with('success', 'Your answers have been recorded!');
 }
+    public function dashboard()
+    {
+        $quizzes = Quiz::orderBy('created_at', 'desc')->get(); // Adjust sorting logic as needed
+        return view('dashboard', compact('quizzes'));
+    }
 
 
 

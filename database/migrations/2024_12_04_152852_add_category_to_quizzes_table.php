@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateChoicesTable extends Migration
+class AddCategoryToQuizzesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateChoicesTable extends Migration
      */
     public function up()
     {
-        Schema::table('choices', function (Blueprint $table) {
-            $table->text('text')->default('')->nullable()->change();
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->string('category')->nullable(); // Add category field
         });
     }
 
@@ -25,8 +25,8 @@ class UpdateChoicesTable extends Migration
      */
     public function down()
     {
-        Schema::table('choices', function (Blueprint $table) {
-            $table->string('text')->change();  // Adjust as needed to revert the changes
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->dropColumn('category'); // Remove category field if rolled back
         });
     }
 }
