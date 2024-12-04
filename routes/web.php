@@ -1,10 +1,10 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\DashboardController;
 
 // Public Routes
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -14,15 +14,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 // Authenticated User Routes
-
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
-
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['verified'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Quiz Routes
     Route::prefix('quizzes')->name('quizzes.')->group(function () {
@@ -33,9 +27,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{quiz}/edit', [QuizController::class, 'edit'])->name('edit');
         Route::put('/{quiz}', [QuizController::class, 'update'])->name('update');
         Route::delete('/{quiz}', [QuizController::class, 'destroy'])->name('destroy');
-        Route::get('/{quiz}/add-questions', [QuizController::class, 'addQuestions'])->name('addQuestions');
-        Route::post('/{quiz}/add-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('storeAdditionalQuestions');
     });
+
+    // Question Management
+    Route::get('/{quiz}/add-questions', [QuizController::class, 'addQuestions'])->name('addQuestions');
+    Route::post('/{quiz}/add-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('storeAdditionalQuestions');
 
     // Results Routes
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
