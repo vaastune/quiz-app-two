@@ -7,11 +7,21 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        // Fetch quizzes ordered by category or class
-        $quizzes = Quiz::orderBy('category')->get();
+    public function index(Request $request)
+{
+    $quizzes = Quiz::query();
 
-        return view('dashboard', compact('quizzes'));
+    if ($request->has('sort')) {
+        $quizzes->orderBy('created_at', $request->input('sort'));
     }
+
+    if ($request->has('category')) {
+        $quizzes->where('category', $request->input('category'));
+    }
+
+    $quizzes = $quizzes->get();
+
+    return view('dashboard', compact('quizzes'));
+}
+
 }
