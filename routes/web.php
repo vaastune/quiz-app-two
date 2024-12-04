@@ -22,6 +22,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
 });
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+});
+
+
 // Home Page and Dashboard
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
 Route::get('/dashboard', function () {
@@ -30,3 +35,8 @@ Route::get('/dashboard', function () {
 
 // Authentication Routes
 Auth::routes();
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -6,7 +6,7 @@
     <h1>Welcome, {{ Auth::user()->name }}!</h1>
     <p>We're glad to have you here. Enjoy exploring the quizzes!</p>
     <a href="{{ route('quizzes.index') }}" class="btn btn-primary">Start Quizzing</a>
-    <img src="{{ asset('images]/3.gif') }}" alt="Welcome Image" class="img-fluid mt-4">
+    <img src="{{ asset('images]/c161526363f848444b4370f09237f94d.jpg') }}" alt="Welcome Image" class="img-fluid mt-4">
         <p class="mt-3">Start exploring and taking quizzes now!</p>
 
 
