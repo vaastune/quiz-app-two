@@ -34,4 +34,5 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Results Routes
-    R
+    Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
+});
