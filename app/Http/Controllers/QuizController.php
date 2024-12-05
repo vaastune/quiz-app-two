@@ -26,7 +26,7 @@ class QuizController extends Controller
 {
     $request->validate([
         'title' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id', // Ensure this is present and correct
+        'category_id' => 'required|exists:categories,id', // Ensures the category exists in the database
         'questions' => 'required|array|min:1|max:5',
         'questions.*' => 'required|string|max:255',
         'choices' => 'required|array|min:1|max:5',
@@ -58,6 +58,7 @@ class QuizController extends Controller
 
     return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
 }
+
 
 
     public function storeAdditionalQuestions(Request $request, $quizId)

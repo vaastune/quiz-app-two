@@ -16,6 +16,7 @@ class CreateQuizzesTable extends Migration
             $table->timestamps();
         });
 
+
     }
 
     public function down()
