@@ -1,8 +1,18 @@
 @extends('adminlte::page')
 
 <a href="/" class="brand-link">
-    <span class="brand-text font-weight-light">Fake Moodle</span>
+    <span class="brand-text font-weight-light">Quiz app</span>
 </a>
+{{-- <li class="nav-item dropdown">
+    <a id="categoryDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Categories
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+        @foreach($categories as $category)
+            <li><a class="dropdown-item" href="{{ route('quizzes.index', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
+        @endforeach
+    </ul>
+</li> --}}
 
 
 @section('title', 'Quiz App')

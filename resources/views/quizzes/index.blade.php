@@ -1,34 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>Quizzes</h2>
-    <a href="{{ route('quizzes.create') }}" class="btn btn-primary mb-3">Create New Quiz</a>
+    <div class="container">
+        <h1>Quiz List</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($quizzes as $quiz)
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $quiz->title }}</td>
-                    <td>
-                        <a href="{{ route('quizzes.edit', $quiz->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form>
-                    </td>
+                    <th>Title</th>
+                    <th>Level</th>
+                    <th>Actions</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($quizzes as $quiz)
+                    <tr>
+                        <td>{{ $quiz->title }}</td>
+                        <td>{{ $quiz->level }}</td>
+                        <td>
+                            <a href="{{ route('quizzes.edit', $quiz->id) }}" class="btn btn-primary">Edit</a>
+                            <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection
 
 

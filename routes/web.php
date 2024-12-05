@@ -27,6 +27,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{quiz}/edit', [QuizController::class, 'edit'])->name('edit');
         Route::put('/{quiz}', [QuizController::class, 'update'])->name('update');
         Route::delete('/{quiz}', [QuizController::class, 'destroy'])->name('destroy');
+        Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+        Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+
+
     });
 
     // Question Management

@@ -8,6 +8,14 @@
             <label for="quiz-title">Quiz Title:</label>
             <input type="text" name="title" id="quiz-title" required>
 
+            <label for="quiz-level">Quiz Level:</label>
+        <select name="level" id="quiz-level" required>
+            <option value="">Select a Level</option>
+            @foreach ($levels as $level)
+                <option value="{{ $level }}">{{ $level }}</option>
+            @endforeach
+        </select>
+
             <div id="questions-section">
                 <div class="question-block">
                     <label>Question:</label>

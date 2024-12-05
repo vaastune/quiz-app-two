@@ -54,15 +54,22 @@ foreach ($request->input('questions') as $index => $questionText) {
             ->with('success', 'Questions added successfully!');
     }
 
+
     public function index()
-    {
-        $quizzes = Quiz::all();
+{
+    $quizzes = Quiz::all();
+    return view('quizzes.index', compact('quizzes'));
+}
 
-        // Fetch the result for the currently authenticated user
-        $result = Result::where('user_id', auth()->id())->first(); // or use 'latest()' to get the most recent result
+    // public function index()
+    // {
+    //     $quizzes = Quiz::all();
 
-        return view('quizzes.index', compact('quizzes', 'result'));
-    }
+    //     // Fetch the result for the currently authenticated user
+    //     $result = Result::where('user_id', auth()->id())->first(); // or use 'latest()' to get the most recent result
+
+    //     return view('quizzes.index', compact('quizzes', 'result'));
+    // }
 
     public function show($id)
 {
@@ -83,13 +90,22 @@ foreach ($request->input('questions') as $index => $questionText) {
 
 
     public function create()
-    {
-        return view('quizzes.create');
-    }
+{
+    $levels = [
+        'Grade 1',
+        'Grade 2',
+        'Grade 3',
+        'Grade 4',
+        'Grade 5'
+    ];
 
-    // The store method
+    return view('quizzes.create', compact('levels'));
+}
+
+
 public function store(Request $request)
 {
+    // Validate the incoming request data
     $request->validate([
         'title' => 'required|string|max:255',
         'questions' => 'required|array|min:1|max:5',
@@ -101,33 +117,35 @@ public function store(Request $request)
         'correct.*' => 'required|integer|min:1|max:4',
     ]);
 
+    // Create the quiz
     $quiz = Quiz::create(['title' => $request->input('title')]);
 
     foreach ($request->input('questions') as $index => $questionText) {
         \Log::info('Creating question with data:', ['question_text' => $questionText]);
 
+        // Create each question
         $question = $quiz->questions()->create([
             'question' => $questionText,
             'quiz_id' => $quiz->id, // Ensure this value matches the quiz ID
         ]);
 
-
         foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
             \Log::info('Creating choice with data:', ['choice_text' => $choiceText]);
 
             if (trim($choiceText) !== '') {
-                $isCorrect = $choiceIndex === ($request->input('correct')[$index] - 1);
-
+                // Create each choice
                 $question->choices()->create([
-                    'text' => $choiceText,
-                    'is_correct' => $isCorrect,
+                    'choice' => $choiceText,
+                    'is_correct' => $request->input('correct')[$index] == ($choiceIndex + 1),
                 ]);
             }
         }
     }
 
-    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully and ready to be taken!');
+    // Redirect with success message
+    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
 }
+
 
 // The addQuestions method should start here, after the closing brace of the store method
 public function addQuestions($id)
