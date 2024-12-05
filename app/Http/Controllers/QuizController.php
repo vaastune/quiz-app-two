@@ -42,6 +42,9 @@ class QuizController extends Controller
         'user_id' => auth()->id(),
     ]);
 
+    dd($request->all()); // Inspect the entire request payload
+
+
     foreach ($request->input('questions') as $index => $questionText) {
         $question = $quiz->questions()->create(['question' => $questionText]);
 
