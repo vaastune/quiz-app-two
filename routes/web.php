@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{quiz}', [QuizController::class, 'destroy'])->name('destroy');
         Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
         Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+        Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+        Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
 
 
     });

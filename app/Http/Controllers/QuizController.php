@@ -23,19 +23,42 @@ class QuizController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $this->validateQuiz($request);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id', // Ensure this is present and correct
+        'questions' => 'required|array|min:1|max:5',
+        'questions.*' => 'required|string|max:255',
+        'choices' => 'required|array|min:1|max:5',
+        'choices.*' => 'required|array|min:2',
+        'choices.*.*' => 'nullable|string|max:255',
+        'correct' => 'required|array|min:1|max:5',
+        'correct.*' => 'required|integer|min:1|max:4',
+    ]);
 
-        $quiz = Quiz::create([
-            'title' => $request->input('title'),
-            'category_id' => $request->input('category_id'),
-            'user_id' => auth()->id(),
-        ]);
+    $quiz = Quiz::create([
+        'title' => $request->input('title'),
+        'category_id' => $request->input('category_id'),
+        'user_id' => auth()->id(),
+    ]);
 
-        $this->storeQuestionsAndChoices($request, $quiz);
+    foreach ($request->input('questions') as $index => $questionText) {
+        $question = $quiz->questions()->create(['question' => $questionText]);
 
-        return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
+        foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
+            if (trim($choiceText) !== '') {
+                $isCorrect = $request->input('correct')[$index] == ($choiceIndex + 1);
+                $question->choices()->create([
+                    'text' => $choiceText,
+                    'is_correct' => $isCorrect,
+                ]);
+            }
+        }
     }
+
+    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
+}
+
 
     public function storeAdditionalQuestions(Request $request, $quizId)
     {
