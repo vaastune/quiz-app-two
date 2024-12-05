@@ -10,6 +10,8 @@
 
     <p>We're glad to have you here. Enjoy exploring the quizzes!</p>
 
+    {{-- <title>{{ config('app.name', 'Quiz Platform') }}</title> --}}
+
     <a href="{{ route('quizzes.index') }}" class="btn btn-primary">Start Quizzing</a>
 
     <img src="{{ asset('images/c161526363f848444b4370f09237f94d.jpg') }}" alt="Welcome Image" class="img-fluid mt-4">

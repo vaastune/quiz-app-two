@@ -1,5 +1,10 @@
 @extends('adminlte::page')
 
+<a href="/" class="brand-link">
+    <span class="brand-text font-weight-light">Fake Moodle</span>
+</a>
+
+
 @section('title', 'Quiz App')
 
 @section('content_header')

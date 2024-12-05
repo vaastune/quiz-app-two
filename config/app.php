@@ -16,9 +16,9 @@ return [
     |
     */
 
-    'name' => 'Fake Moodle', // or any name you prefer
+    //'name' => 'Quiz Platfor', // or any name you prefer
 
-    // 'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
