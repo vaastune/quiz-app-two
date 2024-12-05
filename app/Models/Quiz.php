@@ -25,6 +25,11 @@ class Quiz extends Model
         $results = Result::where('quiz_id', $id)->get();
         return view('quizzes.results', compact('results'));
     }
+    public function category()
+{
+    return $this->belongsTo(Category::class);
+}
+
 
 
 }
