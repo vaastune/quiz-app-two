@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
         Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
         Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+        Route::put('quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
 
 
     });

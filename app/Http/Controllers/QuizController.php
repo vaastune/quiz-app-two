@@ -36,6 +36,10 @@ class QuizController extends Controller
         'correct.*' => 'required|integer|min:1|max:4',
     ]);
 
+
+    $categoryId = $request->input('category_id');
+    dd($categoryId); // Check that this value is correct
+
     $quiz = Quiz::create([
         'title' => $request->input('title'),
         'category_id' => $request->input('category_id'),
