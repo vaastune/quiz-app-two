@@ -95,6 +95,18 @@ foreach ($request->input('questions') as $index => $questionText) {
     return view('quizzes.create', compact('categories'));
 }
 
+public function showResults($id)
+{
+    $quiz = Quiz::with('questions.choices')->findOrFail($id);
+    $results = Result::where('quiz_id', $quiz->id)
+        ->where('user_id', auth()->id())
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return view('quizzes.results', compact('quiz', 'results'));
+}
+
+
 public function store(Request $request)
 {
     $request->validate([
