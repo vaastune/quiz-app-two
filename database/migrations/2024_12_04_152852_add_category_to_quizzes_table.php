@@ -1,32 +1,23 @@
 <?php
-
+// database/migrations/2024_12_04_XXXXXX_add_category_to_quizzes_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class AddCategoryToQuizzesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->string('category')->nullable(); // Add category field
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->dropColumn('category'); // Remove category field if rolled back
+            $table->dropForeign(['category_id']);
+            $table->dropColumn('category_id');
         });
     }
 }
