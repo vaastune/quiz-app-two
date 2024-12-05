@@ -91,23 +91,15 @@ foreach ($request->input('questions') as $index => $questionText) {
 
     public function create()
 {
-    $levels = [
-        'Grade 1',
-        'Grade 2',
-        'Grade 3',
-        'Grade 4',
-        'Grade 5'
-    ];
-
-    return view('quizzes.create', compact('levels'));
+    $categories = Category::all(); // Ensure you have a Category model
+    return view('quizzes.create', compact('categories'));
 }
-
 
 public function store(Request $request)
 {
-    // Validate the incoming request data
     $request->validate([
         'title' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
         'questions' => 'required|array|min:1|max:5',
         'questions.*' => 'required|string|max:255',
         'choices' => 'required|array|min:1|max:5',
@@ -117,32 +109,28 @@ public function store(Request $request)
         'correct.*' => 'required|integer|min:1|max:4',
     ]);
 
-    // Create the quiz
-    $quiz = Quiz::create(['title' => $request->input('title')]);
+    $quiz = Quiz::create([
+        'title' => $request->input('title'),
+        'category_id' => $request->input('category_id'),
+        'user_id' => auth()->id(),
+    ]);
 
     foreach ($request->input('questions') as $index => $questionText) {
-        \Log::info('Creating question with data:', ['question_text' => $questionText]);
-
-        // Create each question
         $question = $quiz->questions()->create([
             'question' => $questionText,
-            'quiz_id' => $quiz->id, // Ensure this value matches the quiz ID
         ]);
 
         foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
-            \Log::info('Creating choice with data:', ['choice_text' => $choiceText]);
-
             if (trim($choiceText) !== '') {
-                // Create each choice
+                $isCorrect = $request->input('correct')[$index] == ($choiceIndex + 1);
                 $question->choices()->create([
-                    'choice' => $choiceText,
-                    'is_correct' => $request->input('correct')[$index] == ($choiceIndex + 1),
+                    'text' => $choiceText,
+                    'is_correct' => $isCorrect,
                 ]);
             }
         }
     }
 
-    // Redirect with success message
     return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
 }
 

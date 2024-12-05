@@ -21,9 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-    //     // Ensure there's only one definition of the `boot` method
-    //     View::composer('*', function ($view) {
-    //         $view->with('categories', Category::all());
-    //     });
-    // }
+        // Ensure there's only one definition of the `boot` method
+        View::composer('*', function ($view) {
+            $view->with('categories', Category::all());
+        });
+    }
 }

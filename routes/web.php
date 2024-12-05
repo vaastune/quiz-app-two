@@ -33,6 +33,11 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
+    Route::middleware(['auth', 'isAdmin'])->group(function () {
+        Route::resource('quizzes', QuizController::class);
+    });
+
+
     // Question Management
     Route::get('/{quiz}/add-questions', [QuizController::class, 'addQuestions'])->name('addQuestions');
     Route::post('/{quiz}/add-questions', [QuizController::class, 'storeAdditionalQuestions'])->name('storeAdditionalQuestions');
