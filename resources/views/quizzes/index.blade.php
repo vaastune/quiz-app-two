@@ -28,7 +28,16 @@
                             Category: {{ $quiz->category->name ?? 'Uncategorized' }} <br>
                             Created by: {{ $quiz->user->name ?? 'Unknown' }}
                         </p>
-                        <a href="{{ route('quizzes.show', $quiz->id) }}" class="btn btn-primary">Take Quiz</a>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('quizzes.show', $quiz->id) }}" class="btn btn-primary">Take Quiz</a>
+
+                            <!-- Delete Button -->
+                            <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this quiz?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,40 +47,3 @@
     </div>
 </div>
 @endsection
-
-
-{{-- @extends('layouts.app')
-
-@section('content')
-    <div class="container">
-        <h1>Quiz List</h1>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Level</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($quizzes as $quiz)
-                    <tr>
-                        <td>{{ $quiz->title }}</td>
-                        <td>{{ $quiz->level }}</td>
-                        <td>
-                            <a href="{{ route('quizzes.edit', $quiz->id) }}" class="btn btn-primary">Edit</a>
-                            <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-@endsection --}}
-
-
