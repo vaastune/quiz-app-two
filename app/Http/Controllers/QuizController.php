@@ -10,17 +10,28 @@ use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
-    public function index()
-    {
-        $quizzes = Quiz::all();
-        return view('quizzes.index', compact('quizzes'));
-    }
+    public function index(Request $request)
+{
+    $categories = Category::all(); // Retrieve all categories
 
-    public function create()
-    {
-        $categories = Category::all();
-        return view('quizzes.create', compact('categories'));
-    }
+    $quizzes = Quiz::when($request->category, function ($query, $categoryId) {
+        $query->where('category_id', $categoryId);
+    })->get();
+
+    return view('quizzes.index', compact('quizzes', 'categories'));
+}
+
+    // public function index()
+    // {
+    //     $quizzes = Quiz::all();
+    //     return view('quizzes.index', compact('quizzes'));
+    // }
+
+    // public function create()
+    // {
+    //     $categories = Category::all();
+    //     return view('quizzes.create', compact('categories'));
+    // }
 
     public function store(Request $request)
 {

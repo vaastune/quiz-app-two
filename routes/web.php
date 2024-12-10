@@ -1,8 +1,8 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultsController;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\DashboardController;
 
@@ -27,19 +27,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{quiz}/edit', [QuizController::class, 'edit'])->name('edit');
         Route::put('/{quiz}', [QuizController::class, 'update'])->name('update');
         Route::delete('/{quiz}', [QuizController::class, 'destroy'])->name('destroy');
-        Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
-        Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
-        Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
-        Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
-        Route::put('quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
-
-
     });
-
-    Route::middleware(['auth', 'isAdmin'])->group(function () {
-        Route::resource('quizzes', QuizController::class);
-    });
-
 
     // Question Management
     Route::get('/{quiz}/add-questions', [QuizController::class, 'addQuestions'])->name('addQuestions');
@@ -47,4 +35,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Results Routes
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
+
+    // Admin Routes
+    Route::middleware('isAdmin')->group(function () {
+        // Admin-specific routes can go here if needed in the future.
+    });
 });
