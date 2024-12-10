@@ -48,17 +48,13 @@ class QuizController extends Controller
         'choices' => 'required|array|min:1|max:5',
         'choices.*' => 'required|array|min:2',
         'choices.*.*' => 'nullable|string|max:255',
+        'correct' => 'required|array|min:1|max:5',
+        'correct.*' => 'required|integer|min:1|max:4',
     ]);
 
     // Check for duplicate questions within the form input
-    $questions = $request->input('questions');
-    $uniqueQuestions = array_unique($questions);
 
-    if (count($questions) !== count($uniqueQuestions)) {
-        return redirect()->back()->withErrors(['questions' => 'Each question must be unique.']);
-    }
-
-    // Create and save the quiz
+    // Create the quiz
     $quiz = new Quiz();
     $quiz->title = $request->input('title');
     $quiz->category_id = $request->input('category_id');
