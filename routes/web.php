@@ -5,6 +5,8 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CategoryController;
+
 
 // Public Routes
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -49,15 +51,5 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('categories', CategoryController::class);
-
-    Route::middleware(['auth'])->group(function () {
-        // Other authenticated routes...
-
-        Route::get('/my-quizzes', [QuizController::class, 'myQuizzes'])->name('my-quizzes');
-
-        // Other routes...
-    });
-
-
-
 });
+
