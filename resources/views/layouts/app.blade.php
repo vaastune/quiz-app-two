@@ -3,6 +3,28 @@
 <a href="/" class="brand-link">
     <span class="brand-text font-weight-light">Quiz app</span>
 </a>
+<!-- resources/views/layouts/app.blade.php -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <!-- Add AdminLTE CSS and other assets here -->
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        @include('layouts.sidebar') <!-- Include the sidebar -->
+
+        <!-- Main content -->
+        <div class="content-wrapper">
+            @yield('content')
+        </div>
+    </div>
+    <!-- Add AdminLTE and jQuery scripts -->
+</body>
+</html>
+
 {{-- <li class="nav-item dropdown">
     <a id="categoryDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         Categories

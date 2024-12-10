@@ -27,7 +27,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{quiz}/edit', [QuizController::class, 'edit'])->name('edit');
         Route::put('/{quiz}', [QuizController::class, 'update'])->name('update');
         Route::delete('/{quiz}', [QuizController::class, 'destroy'])->name('destroy');
+        Route::get('/dashboard', [QuizController::class, 'index'])->name('dashboard');
+        Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+        Route::get('/results', [QuizController::class, 'showResults'])->name('results.index');
+        Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
     });
+
+    // My Quizzes Route
+    Route::get('/my-quizzes', [QuizController::class, 'myQuizzes'])->name('my-quizzes');
 
     // Question Management
     Route::get('/{quiz}/add-questions', [QuizController::class, 'addQuestions'])->name('addQuestions');
@@ -41,7 +48,16 @@ Route::middleware(['auth'])->group(function () {
         // Admin-specific routes can go here if needed in the future.
     });
 
-
     Route::resource('categories', CategoryController::class);
+
+    Route::middleware(['auth'])->group(function () {
+        // Other authenticated routes...
+
+        Route::get('/my-quizzes', [QuizController::class, 'myQuizzes'])->name('my-quizzes');
+
+        // Other routes...
+    });
+
+
 
 });

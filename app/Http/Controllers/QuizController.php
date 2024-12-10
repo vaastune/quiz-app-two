@@ -29,6 +29,16 @@ class QuizController extends Controller
         return view('quizzes.create', compact('categories'));
     }
 
+    public function myQuizzes()
+    {
+    // Logic to get and display the user's quizzes
+    $quizzes = auth()->user()->quizzes; // Assuming you have a relationship set up in User model
+
+    return view('quizzes.my', compact('quizzes'));
+    }
+
+
+
     public function store(Request $request)
     {
         $request->validate([
