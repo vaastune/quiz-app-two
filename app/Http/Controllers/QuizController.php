@@ -38,43 +38,50 @@ class QuizController extends Controller
     }
 
 
-
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'questions' => 'required|array|min:1|max:5',
-            'questions.*' => 'required|string|max:255',
-            'choices' => 'required|array|min:1|max:5',
-            'choices.*' => 'required|array|min:2',
-            'choices.*.*' => 'nullable|string|max:255',
-            'correct' => 'required|array|min:1|max:5',
-            'correct.*' => 'required|integer|min:1|max:4',
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255|unique:quizzes,title',
+        'category_id' => 'required|exists:categories,id',
+        'questions' => 'required|array|min:1|max:5',
+        'questions.*' => 'required|string|max:255',
+        'choices' => 'required|array|min:1|max:5',
+        'choices.*' => 'required|array|min:2',
+        'choices.*.*' => 'nullable|string|max:255',
+    ]);
 
-        $quiz = Quiz::create([
-            'title' => $request->input('title'),
-            'category_id' => $request->input('category_id'),
-            'user_id' => auth()->id(),
-        ]);
+    // Check for duplicate questions within the form input
+    $questions = $request->input('questions');
+    $uniqueQuestions = array_unique($questions);
 
-        foreach ($request->input('questions') as $index => $questionText) {
-            $question = $quiz->questions()->create(['question' => $questionText]);
+    if (count($questions) !== count($uniqueQuestions)) {
+        return redirect()->back()->withErrors(['questions' => 'Each question must be unique.']);
+    }
 
-            foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
-                if (trim($choiceText) !== '') {
-                    $isCorrect = $request->input('correct')[$index] == ($choiceIndex + 1);
-                    $question->choices()->create([
-                        'text' => $choiceText,
-                        'is_correct' => $isCorrect,
-                    ]);
-                }
+    // Create and save the quiz
+    $quiz = new Quiz();
+    $quiz->title = $request->input('title');
+    $quiz->category_id = $request->input('category_id');
+    $quiz->user_id = auth()->id();
+    $quiz->save();
+
+    // Save questions and choices
+    foreach ($request->input('questions') as $index => $questionText) {
+        $question = $quiz->questions()->create(['question' => $questionText]);
+
+        foreach ($request->input('choices')[$index] as $choiceIndex => $choiceText) {
+            if (trim($choiceText) !== '') {
+                $isCorrect = $request->input('correct')[$index] == ($choiceIndex + 1);
+                $question->choices()->create([
+                    'text' => $choiceText,
+                    'is_correct' => $isCorrect,
+                ]);
             }
         }
-
-        return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
     }
+
+    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
+}
 
     public function addQuestions($id)
     {

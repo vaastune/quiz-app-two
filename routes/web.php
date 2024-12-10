@@ -31,6 +31,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/results', [QuizController::class, 'showResults'])->name('results.index');
         Route::post('/results', [ResultAccessController::class, 'showResults'])->name('results.show');
         Route::post('/quizzes/{id}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+        Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+        Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
 
     });
 
