@@ -12,14 +12,18 @@ class QuizController extends Controller
 {
     public function index(Request $request)
 {
-    $categories = Category::all(); // Retrieve all categories
+    $categories = Category::all(); // Fetch all categories for the dropdown
 
-    $quizzes = Quiz::when($request->category, function ($query, $categoryId) {
-        $query->where('category_id', $categoryId);
-    })->get();
+    // Filter quizzes by category if a category is selected
+    $quizzes = Quiz::with('category')
+        ->when($request->category, function ($query, $categoryId) {
+            $query->where('category_id', $categoryId);
+        })
+        ->get();
 
     return view('quizzes.index', compact('quizzes', 'categories'));
 }
+
 
     // public function index()
     // {
@@ -33,11 +37,12 @@ class QuizController extends Controller
     //     return view('quizzes.create', compact('categories'));
     // }
 
+
     public function store(Request $request)
 {
     $request->validate([
         'title' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id', // Ensures the category exists in the database
+        'category_id' => 'required|exists:categories,id', // Validate the category exists
         'questions' => 'required|array|min:1|max:5',
         'questions.*' => 'required|string|max:255',
         'choices' => 'required|array|min:1|max:5',
@@ -47,17 +52,41 @@ class QuizController extends Controller
         'correct.*' => 'required|integer|min:1|max:4',
     ]);
 
-
-    $categoryId = $request->input('category_id');
-    dd($categoryId); // Check that this value is correct
-
     $quiz = Quiz::create([
         'title' => $request->input('title'),
-        'category_id' => $request->input('category_id'),
+        'category_id' => $request->input('category_id'), // Assign category
         'user_id' => auth()->id(),
     ]);
 
-    dd($request->all()); // Inspect the entire request payload
+    // Add questions and choices as you are already doing
+    return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
+}
+
+//     public function store(Request $request)
+// {
+//     $request->validate([
+//         'title' => 'required|string|max:255',
+//         'category_id' => 'required|exists:categories,id', // Ensures the category exists in the database
+//         'questions' => 'required|array|min:1|max:5',
+//         'questions.*' => 'required|string|max:255',
+//         'choices' => 'required|array|min:1|max:5',
+//         'choices.*' => 'required|array|min:2',
+//         'choices.*.*' => 'nullable|string|max:255',
+//         'correct' => 'required|array|min:1|max:5',
+//         'correct.*' => 'required|integer|min:1|max:4',
+//     ]);
+
+
+//     $categoryId = $request->input('category_id');
+//     dd($categoryId); // Check that this value is correct
+
+//     $quiz = Quiz::create([
+//         'title' => $request->input('title'),
+//         'category_id' => $request->input('category_id'),
+//         'user_id' => auth()->id(),
+//     ]);
+
+//     dd($request->all()); // Inspect the entire request payload
 
 
     foreach ($request->input('questions') as $index => $questionText) {
@@ -109,6 +138,12 @@ class QuizController extends Controller
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz updated successfully!');
     }
+    public function create()
+{
+    $categories = Category::all(); // Fetch all categories for the dropdown
+    return view('quizzes.create', compact('categories'));
+}
+
 
     public function destroy($id)
     {

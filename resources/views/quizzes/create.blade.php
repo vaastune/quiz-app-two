@@ -21,6 +21,16 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select name="category_id" id="category" class="form-control" required>
+                    <option value="">Select a category</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
 
 
 

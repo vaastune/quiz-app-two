@@ -40,4 +40,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('isAdmin')->group(function () {
         // Admin-specific routes can go here if needed in the future.
     });
+
+
+    Route::resource('categories', CategoryController::class);
+
 });
