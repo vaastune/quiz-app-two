@@ -7,7 +7,6 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
 
-
 // Public Routes
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -29,10 +28,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{quiz}/edit', [QuizController::class, 'edit'])->name('edit');
         Route::put('/{quiz}', [QuizController::class, 'update'])->name('update');
         Route::delete('/{quiz}', [QuizController::class, 'destroy'])->name('destroy');
-        Route::get('/dashboard', [QuizController::class, 'index'])->name('dashboard');
-        Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
         Route::get('/results', [QuizController::class, 'showResults'])->name('results.index');
-        Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+        Route::post('/results', [ResultAccessController::class, 'showResults'])->name('results.show');
+        Route::post('/quizzes/{id}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+
     });
 
     // My Quizzes Route
@@ -47,9 +46,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin Routes
     Route::middleware('isAdmin')->group(function () {
-        // Admin-specific routes can go here if needed in the future.
+        // Admin-specific routes if needed
     });
 
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+    });
+
+
+    // Category Routes
     Route::resource('categories', CategoryController::class);
 });
-

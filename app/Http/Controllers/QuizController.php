@@ -91,9 +91,12 @@ class QuizController extends Controller
 
     public function show($id)
     {
-        $quiz = Quiz::with('questions.choices')->findOrFail($id);
-        return view('quizzes.show', compact('quiz'));
+        $quiz = Quiz::findOrFail($id);
+        $questions = $quiz->questions; // Assuming there is a relationship set up in the Quiz model
+
+        return view('quizzes.show', compact('quiz', 'questions'));
     }
+
 
     public function destroy($id)
     {
@@ -103,5 +106,35 @@ class QuizController extends Controller
         return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
     }
 
+
     // Additional methods like `update`, `edit`, and submission-related logic here...
+    public function submit(Request $request, $id)
+    {
+        $quiz = Quiz::findOrFail($id);
+        $userAnswers = $request->input('answers');
+        $score = 0;
+        $totalQuestions = $quiz->questions->count();
+
+        foreach ($quiz->questions as $question) {
+            $correctChoice = $question->choices()->where('is_correct', true)->first();
+
+            if (isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $correctChoice->id) {
+                $score++;
+            }
+        }
+
+        // Save the result to the database
+        $result = new Result();
+        $result->quiz_id = $quiz->id;
+        $result->user_id = auth()->id();
+        $result->score = $score;
+        $result->total = $totalQuestions;
+        $result->save();
+
+        // Redirect to the results page
+        return redirect()->route('results.show')->with('message', 'Quiz submitted successfully!');
+    }
+
+
+
 }

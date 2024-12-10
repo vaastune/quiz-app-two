@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Quizzes</h1>
+    <h1>Quizzes available:</h1>
 
     <!-- Category Filter -->
     <form action="{{ route('quizzes.index') }}" method="GET" class="mb-4">

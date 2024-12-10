@@ -3,16 +3,25 @@
 @section('content')
 <div class="container">
     <h1>{{ $quiz->title }}</h1>
+    <p>{{ $quiz->description }}</p>
 
-    @foreach($quiz->questions as $index => $question)
-        <div class="mb-3">
-            <h3>Question {{ $index + 1 }}: {{ $question->question }}</h3>
-            <ul>
+    <form action="{{ route('quizzes.submit', $quiz->id) }}" method="POST">
+        @csrf
+        @foreach($questions as $index => $question)
+            <div class="mb-3">
+                <label>{{ $index + 1 }}. {{ $question->text }}</label><br>
                 @foreach($question->choices as $choice)
-                    <li>{{ $choice->text }}</li>
+                    <div>
+                        <label>
+                            <input type="radio" name="answers[{{ $question->id }}]" value="{{ $choice->id }}" required>
+                            {{ $choice->text }}
+                        </label>
+                    </div>
                 @endforeach
-            </ul>
-        </div>
-    @endforeach
+            </div>
+        @endforeach
+
+        <button type="submit" class="btn btn-success">Submit Answers</button>
+    </form>
 </div>
 @endsection

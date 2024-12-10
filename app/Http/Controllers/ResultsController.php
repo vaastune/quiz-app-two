@@ -14,5 +14,13 @@ class ResultsController extends Controller
     $results = Result::where('user_id', auth()->id())->latest()->get();
     return view('results.index', compact('results'));
 }
+public function showResults()
+{
+    $user = auth()->user();
+    $results = $user->results; // Assuming a one-to-many relationship between User and Result
+
+    return view('results.index', compact('results'));
+}
+
 
 }
